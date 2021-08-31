@@ -10,11 +10,17 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class TemperatureController : ControllerBase
     {
+        [HttpGet]
+        public string GetTemp()
+        {
+            return "hello";
+        }
 
         [HttpPost]
-        public string PostTemperature(string temp)
+        [Route("GetTemp")]
+        public string PostTemperature([FromBody] Test temp)
         {
-            return temp;
+            return temp.TestString +" "+ temp.TestInt;
         }
     }
 }
