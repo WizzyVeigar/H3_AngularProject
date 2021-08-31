@@ -18,9 +18,10 @@ namespace SchoolApi.Controllers
 
         [HttpPost]
         [Route("GetTemp")]
-        public string PostTemperature([FromBody] Test temp)
+        public string PostTemperature([FromBody] string temp)
         {
-            return temp.TestString +" "+ temp.TestInt;
+            //return temp.TestString + " " + temp.TestInt;
+            return temp;
         }
     }
 }
