@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gikgqM8Xqovwey1TqKYQn60vpUdv1Zw2rN7sc5T3Y6ofNoZRdZg4g2qxj1nr/5LzVDYhJZh+p4E2mYgy9RWxew==",
+  "dgSpecHash": "xAdYlXE3Z71CwRnCrGrtXMcum4rQkjSp4pdjN2xqwZJX4loeDwcOho++F+yEHNW60P1uVqqi1xIXzAxOCRcCwA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kenn5073\\H3_Angular\\H3_AngularProject\\SchoolApi\\SchoolApi\\SchoolApi.csproj",
+  "projectFilePath": "C:\\Users\\Kenn5073\\Source\\Repos\\H3_AngularProject\\SchoolApi\\SchoolApi\\SchoolApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kenn5073\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\Kenn5073\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

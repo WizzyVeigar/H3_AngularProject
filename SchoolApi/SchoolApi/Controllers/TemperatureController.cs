@@ -11,9 +11,9 @@ namespace SchoolApi.Controllers
     public class TemperatureController : ControllerBase
     {
         [HttpGet]
-        public string GetTemp()
+        public IActionResult GetTemp()
         {
-            return "hello";
+            return Ok("hello");
         }
 
         [HttpPost]
