@@ -12,5 +12,9 @@ namespace SchoolApi.Models
         {
             LightLevel = light;
         }
+
+        public PhotoResistor()
+        {
+        }
     }
 }
