@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace SchoolApi.Interfaces
 {
-    interface IFetchData
+    interface IFetchData<T>
     {
+        ICollection<T> GetData(string roomNumber);
         //ICollection<> FetchAllData();
         //ICollection<T> FetchNewElements();
     }

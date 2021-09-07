@@ -7,6 +7,11 @@ namespace SchoolApi.Models
 {
     public class DataEntry
     {
+        public DataEntry()
+        {
+            CreatedTime = new DateTime();
+        }
+
         public int RoomNumber { get; set; }
         public DateTime CreatedTime { get; set; } = DateTime.Now;
         public List<HumidityTempSensor> HumidityTempSensor { get; set; } = new List<HumidityTempSensor>();

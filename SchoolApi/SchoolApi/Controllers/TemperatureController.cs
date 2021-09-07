@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TemperatureController : ControllerBase
+    public class TemperatureController : ControllerBase, IFetchData<HumidityTempSensor>
     {
         public TemperatureController()
         {
@@ -29,20 +30,10 @@ namespace SchoolApi.Controllers
             }
         }
 
-
         [HttpGet]
-        public IActionResult GetTemp()
+        public ICollection<HumidityTempSensor> GetData(string roomNumber)
         {
-            return Ok("hello");
-        }
-
-        [HttpPost]
-        [Route("GetTemp")]
-        public string PostTemperature(string temperature, string humidity, string light)
-        {
-            //return temp.TestString + " " + temp.TestInt;
-            Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);
-            return temperature + " and this " + humidity + " and light: " + light;
+            throw new NotImplementedException();
         }
     }
 }

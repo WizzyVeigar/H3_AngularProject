@@ -16,6 +16,7 @@ namespace SchoolApi
 
         public DbSet<HumidityTempSensor> HumidityTempSensor { get; set; }
         public DbSet<PhotoResistor> PhotoResistor { get; set; }
+        public DbSet<DataEntry> DataEntry { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,28 +48,28 @@ namespace SchoolApi
 
 
             modelBuilder.Entity<DataEntry>()
-                .Property(x=> x.RoomNumber).IsRequired();
-            modelBuilder.Entity<DataEntry>()
-                .Property(x => x.CreatedTime).IsRequired();
+                .Property(x => x.RoomNumber).IsRequired();
             modelBuilder.Entity<DataEntry>()
                 .HasKey("RoomNumber", "CreatedTime");
 
 
-            modelBuilder.Entity("DataEntry")
+            modelBuilder.Entity<DataEntry>()
                 .Property<int>("HumId").HasColumnType("int");
 
-            modelBuilder.Entity("DataEntry")
-                .HasMany("HumidityTempSensor")
-                .WithOne("DataEntry")
-                .HasForeignKey("HumidityTempSensor", "HumId");
+            modelBuilder.Entity<DataEntry>()
+                .HasMany(x => x.HumidityTempSensor)
+                .WithOne()
+                .HasForeignKey(x => x.Id);
 
-            modelBuilder.Entity("DataEntry")
+            modelBuilder.Entity<DataEntry>()
                 .Property<int>("PhotoResistorId").HasColumnType("int");
 
-            modelBuilder.Entity("DataEntry")
-                .HasMany("PhotoResistor")
-                .WithOne("DataEntry")
-                .HasForeignKey("PhotoResistor", "PhotoResistorId");
+            modelBuilder.Entity<DataEntry>()
+                .HasMany(x=>x.PhotoResistor)
+                .WithOne()
+                .HasForeignKey(x=> x.Id);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
