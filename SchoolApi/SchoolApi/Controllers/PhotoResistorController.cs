@@ -12,6 +12,8 @@ namespace SchoolApi.Controllers
     [Route("api/Resistor")]
     public class PhotoResistorController : ControllerBase, IFetchData<PhotoResistor>
     {
+        SchoolContext context;
+
         [HttpGet]
         public ICollection<PhotoResistor> GetData(string roomNumber)
         {

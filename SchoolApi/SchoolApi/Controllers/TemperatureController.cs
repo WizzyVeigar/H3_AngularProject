@@ -13,6 +13,8 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class TemperatureController : ControllerBase, IFetchData<HumidityTempSensor>
     {
+        SchoolContext context;
+
         [HttpGet]
         public ICollection<HumidityTempSensor> GetData(string roomNumber)
         {

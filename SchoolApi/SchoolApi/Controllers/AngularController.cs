@@ -12,22 +12,9 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("Api/Angular")]
-    public class AngularController : Controller, IGetFromEF<DataEntry>
+    public class AngularController : Controller
     {
         SchoolContext context;
-
-        public DbContext Context
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         [Route("GetRoom")]
         [HttpGet]
