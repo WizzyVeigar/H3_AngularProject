@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,22 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("Api/Angular")]
-    public class AngularController : Controller
+    public class AngularController : Controller, IGetFromEF<DataEntry>
     {
         SchoolContext context;
+
+        public DbContext Context
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         [Route("GetRoom")]
         [HttpGet]

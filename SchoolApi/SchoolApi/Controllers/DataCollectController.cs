@@ -21,7 +21,7 @@ namespace SchoolApi.Controllers
         {
             using (context = new SchoolContext())
             {
-                context.Add<DataEntry>(new DataEntry
+                context.Add(new DataEntry
                 {
                     CreatedTime = DateTime.Now,
                     RoomNumber = roomNumber,
