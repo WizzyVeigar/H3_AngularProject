@@ -28,46 +28,52 @@ namespace SchoolApi
         {
             //modelBuilder.Entity<DTO>();
 
+
             modelBuilder.Entity<HumidityTempSensor>()
-                .HasKey(x => x.Id);
-            modelBuilder.Entity<HumidityTempSensor>()
-                .Property(x => x.Id)
+                .Property<int>(x=>x.Id)
                 .HasColumnName("HumId")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<HumidityTempSensor>()
+                .HasKey("HumId");
+
+
             modelBuilder.Entity<PhotoResistor>()
-                .HasKey(x => x.Id);
-            modelBuilder.Entity<PhotoResistor>()
-                .Property(x => x.Id)
+                .Property<int>(x=>x.Id)
                 .HasColumnName("PhotoResistorId")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<PhotoResistor>()
+                .HasKey("PhotoResistorId");
 
 
 
             modelBuilder.Entity<DataEntry>()
-                .Property(x => x.RoomNumber).IsRequired();
+                .Property(x => x.RoomNumber);
             modelBuilder.Entity<DataEntry>()
                 .HasKey("RoomNumber", "CreatedTime");
 
 
             modelBuilder.Entity<DataEntry>()
-                .Property<int>("HumId").HasColumnType("int");
+                .Property<int>("HumId");
+
+
+            modelBuilder.Entity<HumidityTempSensor>()
+                .HasOne<DataEntry>()
+                .WithMany()
+                .HasPrincipalKey("HumId")
+                .HasForeignKey("HumId");
 
             modelBuilder.Entity<DataEntry>()
-                .HasMany(x => x.HumidityTempSensor)
-                .WithOne()
-                .HasForeignKey(x => x.Id);
+                .Property<int>("PhotoResistorId");
 
-            modelBuilder.Entity<DataEntry>()
-                .Property<int>("PhotoResistorId").HasColumnType("int");
-
-            modelBuilder.Entity<DataEntry>()
-                .HasMany(x=>x.PhotoResistor)
-                .WithOne()
-                .HasForeignKey(x=> x.Id);
+            modelBuilder.Entity<PhotoResistor>()
+                .HasOne<DataEntry>()
+                .WithMany()
+                .HasPrincipalKey("PhotoResistorId")
+                .HasForeignKey("PhotoResistorId");
 
             base.OnModelCreating(modelBuilder);
         }
