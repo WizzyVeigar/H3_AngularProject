@@ -26,15 +26,6 @@ namespace SchoolApi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*//modelBuilder.Entity<DTO>();
-
-
-            modelBuilder.Entity<HumidityTempSensor>()
-                .Property<int>(x=>x.Id)
-                .HasColumnName("HumId")
-                .IsRequired()
-                .ValueGeneratedOnAdd();*/
-
             modelBuilder.Entity<DataEntry>()
                 .HasKey(c => new {c.RoomNumber, c.CreatedTime});
         }

@@ -9,14 +9,8 @@ namespace SchoolApi.Models
 {
     public class HumidityTempSensor : DTO
     {
-        public float Temperature { get; private set; }
+        public float Temperature { get; set; }
 
-        public float Humidity { get; private set; }
-
-        public HumidityTempSensor(float temperature, float humidity)
-        {
-            Temperature = temperature;
-            Humidity = humidity;
-        }
+        public float Humidity { get; set; }
     }
 }

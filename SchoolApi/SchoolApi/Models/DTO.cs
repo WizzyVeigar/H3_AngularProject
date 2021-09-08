@@ -10,7 +10,6 @@ namespace SchoolApi.Models
 {
     public abstract class DTO
     {
-        public DateTime TimeOccured { get; protected set; }
         [Key]
         public int Id { get; set; }
     }
