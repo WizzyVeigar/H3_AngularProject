@@ -36,7 +36,7 @@ namespace SchoolApi
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<HumidityTempSensor>()
-                .HasKey("HumId");
+                .HasKey(x=>x.Id);
 
 
             modelBuilder.Entity<PhotoResistor>()
@@ -46,7 +46,7 @@ namespace SchoolApi
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<PhotoResistor>()
-                .HasKey("PhotoResistorId");
+                .HasKey(x=>x.Id);
 
 
 

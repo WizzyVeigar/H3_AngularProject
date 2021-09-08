@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SchoolApi.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,13 +14,22 @@ namespace SchoolApi.Controllers
     [Route("api/Arduino")]
     public class DataCollectController : ControllerBase
     {
+        ISqlServerDataAccess sqlServer;
+        public DataCollectController(ISqlServerDataAccess dataAccess)
+        {
+            sqlServer = dataAccess;
+        }
+
         [HttpPost]
         [Route("Save")]
-        public string PostTemperature(string temperature, string humidity, string light)
+        public IActionResult PostTemperature(string temperature, string humidity, string light, string roomNumber)
         {
-            //return temp.TestString + " " + temp.TestInt;
-            Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);
-            return temperature + " and this " + humidity + " and light: " + light;
+            if (((SqlServerDataAccess)sqlServer).SaveData(temperature, humidity, light, roomNumber))
+            {
+                return Ok(temperature + " and this " + humidity + " and light: " + light);
+            }
+            else
+                return BadRequest("Something went wrong");
         }
     }
 }

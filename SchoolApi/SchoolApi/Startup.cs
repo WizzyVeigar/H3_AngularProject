@@ -28,6 +28,7 @@ namespace SchoolApi
         {
 
             services.AddControllers();
+            services.AddScoped<ISqlServerDataAccess, SqlServerDataAccess>();
             services.AddDbContext<SchoolContext>();
 
             services.AddSwaggerGen(c =>

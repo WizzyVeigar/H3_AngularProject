@@ -15,19 +15,19 @@ namespace SchoolApi.Controllers
     {
         public TemperatureController()
         {
-            using (SchoolContext context = new SchoolContext())
-            {
-                context.PhotoResistor.Add(new PhotoResistor(20));
-                //context.MotionDetector.Add(new MotionDetector(MotionCode.MotionDetected, DateTime.Now));
-                context.SaveChanges();
+            //using (SchoolContext context = new SchoolContext())
+            //{
+            //    context.PhotoResistor.Add(new PhotoResistor(20));
+            //    //context.MotionDetector.Add(new MotionDetector(MotionCode.MotionDetected, DateTime.Now));
+            //    context.SaveChanges();
 
-                var collection = context.Model.GetEntityTypes();
+            //    var collection = context.Model.GetEntityTypes();
 
-                foreach (var item in collection)
-                {
-                    Console.WriteLine(item.Name);
-                }
-            }
+            //    foreach (var item in collection)
+            //    {
+            //        Console.WriteLine(item.Name);
+            //    }
+            //}
         }
 
         [HttpGet]
