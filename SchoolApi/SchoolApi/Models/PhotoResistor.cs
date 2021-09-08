@@ -9,14 +9,6 @@ namespace SchoolApi.Models
 {
     public class PhotoResistor : DTO
     {
-        public int LightLevel { get; private set; }
-        public PhotoResistor(int light)
-        {
-            LightLevel = light;
-        }
-
-        public PhotoResistor()
-        {
-        }
+        public int LightLevel { get; set; }
     }
 }

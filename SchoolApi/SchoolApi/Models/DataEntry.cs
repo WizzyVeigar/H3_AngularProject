@@ -14,10 +14,12 @@ namespace SchoolApi.Models
             CreatedTime = new DateTime();
         }
 
-        public int RoomNumber { get; set; }
-        public DateTime CreatedTime { get; set; } = DateTime.Now;
+        public string RoomNumber { get; set; }
+        public DateTime CreatedTime { get; set; }
+
         [ForeignKey("HumidityTempSensor")]
         public int HumidId { get; set; }
+
         [ForeignKey("PhotoResistor")]
         public int PhotoResId { get; set; }
 
