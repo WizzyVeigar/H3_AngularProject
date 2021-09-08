@@ -10,8 +10,8 @@ using SchoolApi;
 namespace SchoolApi.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20210908063616_thirdMigration")]
-    partial class thirdMigration
+    [Migration("20210908080001_testingshit1")]
+    partial class testingshit1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,34 +29,30 @@ namespace SchoolApi.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("HumId")
+                    b.Property<int>("HumidId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PhotoResistorId")
+                    b.Property<int>("PhotoResId")
                         .HasColumnType("int");
 
                     b.HasKey("RoomNumber", "CreatedTime");
+
+                    b.HasIndex("HumidId");
+
+                    b.HasIndex("PhotoResId");
 
                     b.ToTable("DataEntry");
                 });
 
             modelBuilder.Entity("SchoolApi.Models.HumidityTempSensor", b =>
                 {
-                    b.Property<int>("HumId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DataEntryCreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DataEntryRoomNumber")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<float>("Humidity")
                         .HasColumnType("real");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<float>("Temperature")
                         .HasColumnType("real");
@@ -64,27 +60,17 @@ namespace SchoolApi.Migrations
                     b.Property<DateTime>("TimeOccured")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("HumId");
-
-                    b.HasIndex("DataEntryRoomNumber", "DataEntryCreatedTime");
+                    b.HasKey("Id");
 
                     b.ToTable("HumidityTempSensor");
                 });
 
             modelBuilder.Entity("SchoolApi.Models.PhotoResistor", b =>
                 {
-                    b.Property<int>("PhotoResistorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DataEntryCreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DataEntryRoomNumber")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("LightLevel")
                         .HasColumnType("int");
@@ -92,43 +78,25 @@ namespace SchoolApi.Migrations
                     b.Property<DateTime>("TimeOccured")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PhotoResistorId");
-
-                    b.HasIndex("DataEntryRoomNumber", "DataEntryCreatedTime");
+                    b.HasKey("Id");
 
                     b.ToTable("PhotoResistor");
                 });
 
-            modelBuilder.Entity("SchoolApi.Models.HumidityTempSensor", b =>
-                {
-                    b.HasOne("SchoolApi.Models.DataEntry", null)
-                        .WithMany()
-                        .HasForeignKey("HumId")
-                        .HasPrincipalKey("HumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolApi.Models.DataEntry", null)
-                        .WithMany("HumidityTempSensor")
-                        .HasForeignKey("DataEntryRoomNumber", "DataEntryCreatedTime");
-                });
-
-            modelBuilder.Entity("SchoolApi.Models.PhotoResistor", b =>
-                {
-                    b.HasOne("SchoolApi.Models.DataEntry", null)
-                        .WithMany()
-                        .HasForeignKey("PhotoResistorId")
-                        .HasPrincipalKey("PhotoResistorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolApi.Models.DataEntry", null)
-                        .WithMany("PhotoResistor")
-                        .HasForeignKey("DataEntryRoomNumber", "DataEntryCreatedTime");
-                });
-
             modelBuilder.Entity("SchoolApi.Models.DataEntry", b =>
                 {
+                    b.HasOne("SchoolApi.Models.HumidityTempSensor", "HumidityTempSensor")
+                        .WithMany()
+                        .HasForeignKey("HumidId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolApi.Models.PhotoResistor", "PhotoResistor")
+                        .WithMany()
+                        .HasForeignKey("PhotoResId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("HumidityTempSensor");
 
                     b.Navigation("PhotoResistor");

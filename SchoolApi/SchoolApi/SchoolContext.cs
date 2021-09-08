@@ -26,56 +26,17 @@ namespace SchoolApi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<DTO>();
+            /*//modelBuilder.Entity<DTO>();
 
 
             modelBuilder.Entity<HumidityTempSensor>()
                 .Property<int>(x=>x.Id)
                 .HasColumnName("HumId")
                 .IsRequired()
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<HumidityTempSensor>()
-                .HasKey("HumId");
-
-
-            modelBuilder.Entity<PhotoResistor>()
-                .Property<int>(x=>x.Id)
-                .HasColumnName("PhotoResistorId")
-                .IsRequired()
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<PhotoResistor>()
-                .HasKey("PhotoResistorId");
-
-
+                .ValueGeneratedOnAdd();*/
 
             modelBuilder.Entity<DataEntry>()
-                .Property(x => x.RoomNumber);
-            modelBuilder.Entity<DataEntry>()
-                .HasKey("RoomNumber", "CreatedTime");
-
-
-            modelBuilder.Entity<DataEntry>()
-                .Property<int>("HumId");
-
-
-            modelBuilder.Entity<HumidityTempSensor>()
-                .HasOne<DataEntry>()
-                .WithMany()
-                .HasPrincipalKey("HumId")
-                .HasForeignKey("HumId");
-
-            modelBuilder.Entity<DataEntry>()
-                .Property<int>("PhotoResistorId");
-
-            modelBuilder.Entity<PhotoResistor>()
-                .HasOne<DataEntry>()
-                .WithMany()
-                .HasPrincipalKey("PhotoResistorId")
-                .HasForeignKey("PhotoResistorId");
-
-            base.OnModelCreating(modelBuilder);
+                .HasKey(c => new {c.RoomNumber, c.CreatedTime});
         }
     }
 }
