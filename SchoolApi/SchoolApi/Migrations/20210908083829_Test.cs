@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SchoolApi.Migrations
 {
-    public partial class testingshit1 : Migration
+    public partial class Test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +14,7 @@ namespace SchoolApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Temperature = table.Column<float>(type: "real", nullable: false),
-                    Humidity = table.Column<float>(type: "real", nullable: false),
-                    TimeOccured = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Humidity = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,8 +27,7 @@ namespace SchoolApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LightLevel = table.Column<int>(type: "int", nullable: false),
-                    TimeOccured = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LightLevel = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +38,7 @@ namespace SchoolApi.Migrations
                 name: "DataEntry",
                 columns: table => new
                 {
-                    RoomNumber = table.Column<int>(type: "int", nullable: false),
+                    RoomNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HumidId = table.Column<int>(type: "int", nullable: false),
                     PhotoResId = table.Column<int>(type: "int", nullable: false)

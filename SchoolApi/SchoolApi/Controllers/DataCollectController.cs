@@ -27,22 +27,18 @@ namespace SchoolApi.Controllers
                     RoomNumber = roomNumber,
                     PhotoResistor = new PhotoResistor
                     {
-                        Id = 1,
                         LightLevel = int.Parse(light),
                     },
-                    PhotoResId = 1,
                     HumidityTempSensor = new HumidityTempSensor()
                     {
-                        Id = 1,
                         Humidity = float.Parse(humidity),
                         Temperature = float.Parse(temperature)
-                    },
-                    HumidId = 1
+                    }
                 });
 
                 context.SaveChanges();
             }
-            //return temp.TestString + " " + temp.TestInt;
+
             Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);
             return temperature + " and this " + humidity + " and light: " + light;
         }

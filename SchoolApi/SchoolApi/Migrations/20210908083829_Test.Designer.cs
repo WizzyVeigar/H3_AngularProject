@@ -10,8 +10,8 @@ using SchoolApi;
 namespace SchoolApi.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20210908080001_testingshit1")]
-    partial class testingshit1
+    [Migration("20210908083829_Test")]
+    partial class Test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,8 @@ namespace SchoolApi.Migrations
 
             modelBuilder.Entity("SchoolApi.Models.DataEntry", b =>
                 {
-                    b.Property<int>("RoomNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("RoomNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
@@ -57,9 +57,6 @@ namespace SchoolApi.Migrations
                     b.Property<float>("Temperature")
                         .HasColumnType("real");
 
-                    b.Property<DateTime>("TimeOccured")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("HumidityTempSensor");
@@ -74,9 +71,6 @@ namespace SchoolApi.Migrations
 
                     b.Property<int>("LightLevel")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeOccured")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
