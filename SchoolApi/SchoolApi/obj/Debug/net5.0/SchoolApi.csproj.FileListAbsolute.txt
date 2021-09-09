@@ -35,8 +35,6 @@ C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\SchoolApi.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\ref\SchoolApi.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\SchoolApi.pdb
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\EntityFramework.SqlServer.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\EntityFramework.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\Humanizer.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
@@ -56,9 +54,7 @@ C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\System.CodeDom.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\System.Data.SqlClient.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\System.Runtime.Caching.dll
@@ -73,11 +69,6 @@ C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.pdb
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win-arm64\native\sni.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win-x64\native\sni.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
-C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Benjamin Roesdal\Documents\GitHub\H3_AngularProject\SchoolApi\SchoolApi\obj\Debug\net5.0\SchoolApi.csproj.AssemblyReference.cache

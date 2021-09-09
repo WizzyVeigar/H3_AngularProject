@@ -29,6 +29,8 @@ namespace SchoolApi.Controllers
                 return context;
             }
 
+
+
             set
             {
                 context = value;
@@ -43,16 +45,16 @@ namespace SchoolApi.Controllers
             {
                 try
                 {
-                    List<DataEntry> entries;
+                    
                     //if room number is null or wasn't specified, get all rooms
                     if (roomNumber != null)
                     {
-                        return entries = ((SchoolContext)Context).DataEntry
-                             .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
-                             .Include(x => x.HumidityTempSensor)
-                             .Include(x => x.PhotoResistor).ToList();
+                        return ((SchoolContext)Context).DataEntry
+                            .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                            .Include(x => x.HumidityTempSensor)
+                            .Include(x => x.PhotoResistor).ToList();
                     }
-                    return entries = ((SchoolContext)Context).DataEntry
+                    return ((SchoolContext)Context).DataEntry
                         .Include(x => x.HumidityTempSensor)
                         .Include(x => x.PhotoResistor).ToList();
                 }
