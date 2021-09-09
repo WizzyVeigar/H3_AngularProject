@@ -10,12 +10,20 @@ import { RoomService } from '../room.service';
 export class RoomInfoComponent implements OnInit {
 
   roomList : any;
+  specificRoom : any;
   constructor(private room:RoomService) { 
   }
 
   ngOnInit(): void {
     this.room.getData().subscribe(e=>{
       this.roomList = e;
+    });
+  }
+
+  GetRoom(roomNumber:String): void {
+    this.room.getData().subscribe(e=>{
+      this.specificRoom = e;
+      document.getElementById("RoomNumber").innerText = this.specificRoom.roomNumber;
     });
   }
 
