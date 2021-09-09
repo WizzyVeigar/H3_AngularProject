@@ -75,7 +75,7 @@ namespace SchoolApi.Controllers
                 try
                 {
                     //return ((SchoolContext)Context).DataEntry
-
+                    return null;
 
                 }
                 catch (Exception e)
