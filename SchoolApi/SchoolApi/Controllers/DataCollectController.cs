@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
@@ -11,17 +12,33 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("api/Arduino")]
-    public class DataCollectController : ControllerBase
+    public class DataCollectController : ControllerBase, IHaveDbContext
     {
-        SchoolContext context;
+        public DataCollectController(DbContext context)
+        {
+            Context = context;
+        }
+
+        public DbContext Context
+        {
+            get
+            {
+                return Context;
+            }
+
+            set
+            {
+                Context = value;
+            }
+        }
 
         [HttpPost]
         [Route("Save")]
         public string PostTemperature(string temperature, string humidity, string light, string roomNumber)
         {
-            using (context = new SchoolContext())
+            using (Context = new SchoolContext())
             {
-                context.Add(new DataEntry
+                Context.Add(new DataEntry
                 {
                     CreatedTime = DateTime.Now,
                     RoomNumber = roomNumber,
@@ -36,7 +53,7 @@ namespace SchoolApi.Controllers
                     }
                 });
 
-                context.SaveChanges();
+                Context.SaveChanges();
             }
 
             Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);
