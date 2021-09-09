@@ -65,5 +65,25 @@ namespace SchoolApi.Controllers
                 }
             }
         }
+
+        [Route("Latest")]
+        [HttpGet]
+        public List<DataEntry> GetLatestEntryAllRooms()
+        {
+            using (Context = new SchoolContext())
+            {
+                try
+                {
+                    //return ((SchoolContext)Context).DataEntry
+
+
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return null;
+                }
+            }
+        }
     }
 }
