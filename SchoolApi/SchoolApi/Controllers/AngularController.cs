@@ -12,23 +12,26 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("Api/Angular")]
+    //Controller for sending objects to the front end
     public class AngularController : Controller, IHaveDbContext
     {
+        //DI a DbContext class into the controller
         public AngularController(DbContext context)
         {
             Context = context;
         }
 
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 
@@ -41,18 +44,17 @@ namespace SchoolApi.Controllers
                 try
                 {
                     List<DataEntry> entries;
-
-                    if (roomNumber == null)
+                    //if room number is null or wasn't specified, get all rooms
+                    if (roomNumber != null)
                     {
-                        entries = ((SchoolContext)Context).DataEntry
-                            .Include(x => x.HumidityTempSensor)
-                            .Include(x => x.PhotoResistor).ToList();
+                        return entries = ((SchoolContext)Context).DataEntry
+                             .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                             .Include(x => x.HumidityTempSensor)
+                             .Include(x => x.PhotoResistor).ToList();
                     }
-                    entries = ((SchoolContext)Context).DataEntry
-                         .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
-                         .Include(x => x.HumidityTempSensor)
-                         .Include(x => x.PhotoResistor).ToList();
-                    return entries;
+                    return entries = ((SchoolContext)Context).DataEntry
+                        .Include(x => x.HumidityTempSensor)
+                        .Include(x => x.PhotoResistor).ToList();
                 }
                 catch (Exception e)
                 {

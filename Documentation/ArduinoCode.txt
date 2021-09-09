@@ -1,19 +1,3 @@
-/*
-  Web client
-
- This sketch connects to a website (http://www.google.com)
- using an Arduino Wiznet Ethernet shield.
-
- Circuit:
- * Ethernet shield attached to pins 10, 11, 12, 13
-
- created 18 Dec 2009
- by David A. Mellis
- modified 9 Apr 2012
- by Tom Igoe, based on work by Adrian McEwen
-
- */
-
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -21,18 +5,25 @@
 
 #define DHTPIN 8     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
-float h;
-float t;
 #define fan 4
 
-int lightVal;
+//This arduino is assigned to this room number
+String roomNumber = "H.01";
+
+//The path for the POST endpoint
+String controllerPath = "/api/Arduino/Save";
+
+float h; //Humidity
+float t; //Temperature
+
+int lightVal; //Used for storing the light value from the photoresistor
 int lightCal;
 bool HasLight;
 
 int maxHum = 60;
 int maxTemp = 40;
 
-DHT dht(DHTPIN, DHTTYPE);
+DHT dht(DHTPIN, DHTTYPE); //Create DHT object
 
 
 
@@ -42,16 +33,15 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
-IPAddress server(192,168,1,115);  // numeric IP for Google (no DNS)
-//char server[] = "192,168,1,115";    // name address for Google (using DNS)
+String serverIp = "192.168.1.115";
+IPAddress server(192,168,1,115);
+int portNumber = 48935; 
 
-// Set the static IP address to use if the DHCP fails to assign
+// Set the static IP address
 IPAddress ip(192, 168, 1, 112);
 IPAddress myDns(192, 168, 1, 1);
 
 // Initialize the Ethernet client library
-// with the IP address and port of the server
-// that you want to connect to (port 80 is default for HTTP):
 EthernetClient client;
 
 // Variables to measure the speed
@@ -60,25 +50,16 @@ unsigned long byteCount = 0;
 bool printWebData = true;  // set to false for better speed measurement
 
 void setup() {
-  // You can use Ethernet.init(pin) to configure the CS pin
-  //Ethernet.init(10);  // Most Arduino shields
-  //Ethernet.init(5);   // MKR ETH shield
-  //Ethernet.init(0);   // Teensy 2.0
-  //Ethernet.init(20);  // Teensy++ 2.0
-  //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
-  //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
-
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  lightCal = analogRead(A5);
-  SetupTempAndHumid();
+  lightCal = analogRead(A5); //Initial reading of light level
+  
+  StartTempAndHumid();
   // start the Ethernet connection:
-  Serial.println("Initialize Ethernet with DHCP:");
-
     Ethernet.begin(mac, ip, myDns);
   // give the Ethernet shield a second to initialize:
   delay(1000);
@@ -87,14 +68,13 @@ void setup() {
   Serial.println("...");
 
   // if you get a connection, report back via serial:
-  char* queryString = "?temperature=25&humidity=62";
   beginMicros = micros();
 }
 
 void loop() {
-  LoopTempAndHumid();
-  LoopPhotoresistor();
-  PostRequest(String(t),String(h),String(HasLight));
+  ReadTempAndHumidity();
+  ReadPhotoResistor();
+  PostRequest(String(t), String(h), String(HasLight)); //Do Post request
   // if there are incoming bytes available
   // from the server, read them and print them:
   int len = client.available();
@@ -108,6 +88,7 @@ void loop() {
     byteCount = byteCount + len;
   }
 
+  //Show statistical data about the amount of data received, over a period of time
   // if the server's disconnected, stop the client:
   if (!client.connected()) {
     endMicros = micros();
@@ -124,25 +105,23 @@ void loop() {
     Serial.print(rate);
     Serial.print(" kbytes/second");
     Serial.println();
-
-    // do nothing forevermore:
-    while (true) {
-      delay(1);
-    }
   }
-  delay(10000);
+  delay(15000);
 }
 
 
 void PostRequest(String temperature,String humidity,String light){
-  String queryString = "?temperature=" + temperature + "&humidity=" + humidity + "&light=" + light;
-    if (client.connect(server, 48935)) {
+  String queryString = "?temperature=" + temperature + "&humidity=" + humidity + "&light=" + light + "&roomNumber="+roomNumber;
+
+  Serial.print("This is what is sent " + controllerPath + String(queryString));
+    //Connect at the port we use
+    if (client.connect(server, portNumber)) {
     Serial.print("connected to ");
     Serial.println(client.remoteIP());
     // Make a HTTP request:
         int length = sizeof(queryString);
-    client.println("POST /api/Temperature/GetTemp" + String(queryString) + " HTTP/1.1");
-    client.println("Host: 192.168.1.115:48935");
+    client.println("POST "+ controllerPath + String(queryString) + " HTTP/1.1");
+    client.println("Host: " + serverIp+ ":" + String(portNumber));
     client.println("Content-Length:" + String(length));
     client.println("Connection: close");
     client.println();
@@ -152,12 +131,12 @@ void PostRequest(String temperature,String humidity,String light){
   }
 }
 
-void SetupTempAndHumid(){
+void StartTempAndHumid(){
   pinMode(fan, OUTPUT);
   dht.begin();
 }
 
-void LoopPhotoresistor(){
+void ReadPhotoResistor(){
   //Take a reading using analogRead() on sensor pin and store it in lightVal
   lightVal = analogRead(A5);
 
@@ -177,7 +156,7 @@ void LoopPhotoresistor(){
   }
 }
 
-void LoopTempAndHumid(){
+void ReadTempAndHumidity(){
 
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
@@ -205,4 +184,3 @@ void LoopTempAndHumid(){
   Serial.println(" *C ");
 
 }
-

@@ -7,6 +7,6 @@ namespace SchoolApi.Interfaces
 {
     interface IFetchData<T>
     {
-        ICollection<T> GetData(string roomNumber);
+        List<T> GetData(string roomNumber);
     }
 }

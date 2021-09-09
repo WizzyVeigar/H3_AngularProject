@@ -19,21 +19,22 @@ namespace SchoolApi.Controllers
             Context = context;
         }
 
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 
         [HttpGet]
-        public ICollection<HumidityTempSensor> GetData(string roomNumber)
+        public List<HumidityTempSensor> GetData(string roomNumber)
         {
             throw new NotImplementedException();
         }

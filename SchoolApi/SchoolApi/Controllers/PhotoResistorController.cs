@@ -18,23 +18,28 @@ namespace SchoolApi.Controllers
             Context = context;
         }
 
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 
         [HttpGet]
-        public ICollection<PhotoResistor> GetData(string roomNumber)
+        public List<PhotoResistor> GetData(string roomNumber)
         {
-            throw new NotImplementedException();
+            List<PhotoResistor> resistors = ((SchoolContext)Context).DataEntry
+                .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                .Select(x => x.PhotoResistor).ToList();
+
+            return resistors;
         }
     }
 }
