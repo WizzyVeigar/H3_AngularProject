@@ -13,21 +13,19 @@ namespace SchoolApi.Controllers
     [Route("api/Resistor")]
     public class PhotoResistorController : ControllerBase, IFetchData<PhotoResistor>
     {
-        public PhotoResistorController(DbContext context)
-        {
-            Context = context;
-        }
-
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
+
+
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 

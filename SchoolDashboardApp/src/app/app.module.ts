@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { RoomInfoComponent } from './room-info/room-info.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatGridListModule } from '@angular/material/grid-list'; 
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     RoomInfoComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

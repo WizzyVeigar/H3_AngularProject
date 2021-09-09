@@ -1,5 +1,6 @@
 import { HtmlParser } from '@angular/compiler';
 import { Component,ViewChild, OnInit } from '@angular/core';
+import { RoomService } from '../room.service';
 
 @Component({
   selector: 'app-room-info',
@@ -8,12 +9,14 @@ import { Component,ViewChild, OnInit } from '@angular/core';
 })
 export class RoomInfoComponent implements OnInit {
 
-  dosomething(roomNum):void {
-    alert("GET Call on room " + roomNum + " should happen now");
+  roomList : any;
+  constructor(private room:RoomService) { 
   }
-  constructor() { }
 
   ngOnInit(): void {
+    this.room.getData().subscribe(e=>{
+      this.roomList = e;
+    });
   }
 
 }

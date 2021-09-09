@@ -14,21 +14,19 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class TemperatureController : ControllerBase, IFetchData<HumidityTempSensor>
     {
-        public TemperatureController(DbContext context)
-        {
-            Context = context;
-        }
-
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
+
+
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 

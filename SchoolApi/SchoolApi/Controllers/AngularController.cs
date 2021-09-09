@@ -14,21 +14,19 @@ namespace SchoolApi.Controllers
     [Route("Api/Angular")]
     public class AngularController : Controller, IHaveDbContext
     {
-        public AngularController(DbContext context)
-        {
-            Context = context;
-        }
-
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
+
+
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 
@@ -42,17 +40,16 @@ namespace SchoolApi.Controllers
                 {
                     List<DataEntry> entries;
 
-                    if (roomNumber == null)
+                    if (roomNumber != null)
                     {
-                        entries = ((SchoolContext)Context).DataEntry
+                        return ((SchoolContext)Context).DataEntry
+                            .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
                             .Include(x => x.HumidityTempSensor)
                             .Include(x => x.PhotoResistor).ToList();
                     }
-                    entries = ((SchoolContext)Context).DataEntry
-                         .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
-                         .Include(x => x.HumidityTempSensor)
-                         .Include(x => x.PhotoResistor).ToList();
-                    return entries;
+                    return ((SchoolContext)Context).DataEntry
+                        .Include(x => x.HumidityTempSensor)
+                        .Include(x => x.PhotoResistor).ToList();
                 }
                 catch (Exception e)
                 {

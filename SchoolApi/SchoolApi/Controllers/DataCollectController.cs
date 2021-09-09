@@ -14,21 +14,17 @@ namespace SchoolApi.Controllers
     [Route("api/Arduino")]
     public class DataCollectController : ControllerBase, IHaveDbContext
     {
-        public DataCollectController(DbContext context)
-        {
-            Context = context;
-        }
-
+        private DbContext context;
         public DbContext Context
         {
             get
             {
-                return Context;
+                return context;
             }
 
             set
             {
-                Context = value;
+                context = value;
             }
         }
 
