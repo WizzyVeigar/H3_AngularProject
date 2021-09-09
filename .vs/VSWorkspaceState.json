@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\SchoolApi",
+    "\\SchoolApi\\SchoolApi",
+    "\\SchoolApi\\SchoolApi\\Controllers"
   ],
-  "SelectedNode": "\\SchoolApi.sln",
+  "SelectedNode": "\\SchoolApi\\SchoolApi\\Controllers\\AngularController.cs",
   "PreviewInSolutionExplorer": false
 }

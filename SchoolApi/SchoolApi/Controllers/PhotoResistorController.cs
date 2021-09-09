@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
@@ -12,6 +13,24 @@ namespace SchoolApi.Controllers
     [Route("api/Resistor")]
     public class PhotoResistorController : ControllerBase, IFetchData<PhotoResistor>
     {
+        public PhotoResistorController(DbContext context)
+        {
+            Context = context;
+        }
+
+        public DbContext Context
+        {
+            get
+            {
+                return Context;
+            }
+
+            set
+            {
+                Context = value;
+            }
+        }
+
         [HttpGet]
         public ICollection<PhotoResistor> GetData(string roomNumber)
         {
