@@ -100,5 +100,38 @@ namespace SchoolApi.Controllers
                 }
             }
         }
+
+        [Route("LatestAll")]
+        [HttpGet]
+        public List<DataEntry> GetLatestEntryAllRooms()
+        {
+            using (Context = new SchoolContext())
+            {
+                try
+                {
+                    List<DataEntry> entries = null;
+
+                    for (int i = 0; i < ((SchoolContext)Context).DataEntry.Count(); i++)
+                    {
+                        DataEntry entry = ((SchoolContext)Context).DataEntry.ElementAt<DataEntry>(i);
+
+
+                        ((SchoolContext)Context).DataEntry.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber);
+
+                        //for (int j = 0; j < entries.Count; j++)
+                        //{
+
+                        //}
+
+                    }
+                    return entries;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return null;
+                }
+            }
+        }
     }
 }
