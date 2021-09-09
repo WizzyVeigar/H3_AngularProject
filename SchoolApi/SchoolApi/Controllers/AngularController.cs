@@ -45,7 +45,7 @@ namespace SchoolApi.Controllers
             {
                 try
                 {
-                    
+
                     //if room number is null or wasn't specified, get all rooms
                     if (roomNumber != null)
                     {
@@ -66,16 +66,31 @@ namespace SchoolApi.Controllers
             }
         }
 
-        [Route("Latest")]
+        [Route("LatestSingle")]
         [HttpGet]
-        public List<DataEntry> GetLatestEntryAllRooms()
+        public DataEntry GetLatestEntrySingleRoom(string roomNumber)
         {
             using (Context = new SchoolContext())
             {
                 try
                 {
-                    //return ((SchoolContext)Context).DataEntry
-                    return null;
+                    List<DataEntry> collection = ((SchoolContext)Context).DataEntry
+                        .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower()).ToList();
+
+                    DataEntry entry = null;
+                    for (int i = 0; i < collection.Count; i++)
+                    {
+                        DataEntry dbData = collection[i];
+                        //Give it the first value in the List, if there are no elements, we return null in exception
+                        if (i == 0)
+                            entry = dbData;
+
+                        if (entry.CreatedTime < dbData.CreatedTime)
+                        {
+                            entry = dbData;
+                        }
+                    }
+                    return entry;
 
                 }
                 catch (Exception e)

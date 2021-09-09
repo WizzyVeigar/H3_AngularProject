@@ -1,6 +1,6 @@
 import { HtmlParser } from '@angular/compiler';
 import { Component,ViewChild, OnInit } from '@angular/core';
-import { RoomService } from '../room.service';
+import { RoomObj, RoomService } from '../room.service';
 
 @Component({
   selector: 'app-room-info',
@@ -10,6 +10,7 @@ import { RoomService } from '../room.service';
 export class RoomInfoComponent implements OnInit {
 
   roomList : any;
+  roomtest : any;
   constructor(private room:RoomService) { 
   }
 
@@ -18,5 +19,4 @@ export class RoomInfoComponent implements OnInit {
       this.roomList = e;
     });
   }
-
 }
