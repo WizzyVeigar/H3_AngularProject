@@ -14,6 +14,11 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class TemperatureController : ControllerBase, IFetchData<HumidityTempSensor>
     {
+        public TemperatureController(DbContext context)
+        {
+            Context = context;
+        }
+
         private DbContext context;
         public DbContext Context
         {
@@ -31,7 +36,7 @@ namespace SchoolApi.Controllers
         }
 
         [HttpGet]
-        public ICollection<HumidityTempSensor> GetData(string roomNumber)
+        public List<HumidityTempSensor> GetData(string roomNumber)
         {
             throw new NotImplementedException();
         }

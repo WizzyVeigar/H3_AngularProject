@@ -12,8 +12,15 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("Api/Angular")]
+    //Controller for sending objects to the front end
     public class AngularController : Controller, IHaveDbContext
     {
+        //DI a DbContext class into the controller
+        public AngularController(DbContext context)
+        {
+            Context = context;
+        }
+
         private DbContext context;
         public DbContext Context
         {
@@ -38,8 +45,8 @@ namespace SchoolApi.Controllers
             {
                 try
                 {
-                    List<DataEntry> entries;
 
+                    //if room number is null or wasn't specified, get all rooms
                     if (roomNumber != null)
                     {
                         return ((SchoolContext)Context).DataEntry
@@ -50,6 +57,74 @@ namespace SchoolApi.Controllers
                     return ((SchoolContext)Context).DataEntry
                         .Include(x => x.HumidityTempSensor)
                         .Include(x => x.PhotoResistor).ToList();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return null;
+                }
+            }
+        }
+
+        [Route("LatestSingle")]
+        [HttpGet]
+        public DataEntry GetLatestEntrySingleRoom(string roomNumber)
+        {
+            using (Context = new SchoolContext())
+            {
+                try
+                {
+                    List<DataEntry> collection = ((SchoolContext)Context).DataEntry
+                        .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower()).ToList();
+
+                    DataEntry entry = null;
+                    for (int i = 0; i < collection.Count; i++)
+                    {
+                        DataEntry dbData = collection[i];
+                        //Give it the first value in the List, if there are no elements, we return null in exception
+                        if (i == 0)
+                            entry = dbData;
+
+                        if (entry.CreatedTime < dbData.CreatedTime)
+                        {
+                            entry = dbData;
+                        }
+                    }
+                    return entry;
+
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return null;
+                }
+            }
+        }
+
+        [Route("LatestAll")]
+        [HttpGet]
+        public List<DataEntry> GetLatestEntryAllRooms()
+        {
+            using (Context = new SchoolContext())
+            {
+                try
+                {
+                    List<DataEntry> entries = null;
+
+                    for (int i = 0; i < ((SchoolContext)Context).DataEntry.Count(); i++)
+                    {
+                        DataEntry entry = ((SchoolContext)Context).DataEntry.ElementAt<DataEntry>(i);
+
+
+                        ((SchoolContext)Context).DataEntry.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber);
+
+                        //for (int j = 0; j < entries.Count; j++)
+                        //{
+
+                        //}
+
+                    }
+                    return entries;
                 }
                 catch (Exception e)
                 {

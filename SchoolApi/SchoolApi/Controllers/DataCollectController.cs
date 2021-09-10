@@ -14,6 +14,10 @@ namespace SchoolApi.Controllers
     [Route("api/Arduino")]
     public class DataCollectController : ControllerBase, IHaveDbContext
     {
+        public DataCollectController(DbContext context)
+        {
+            Context = context;
+        }
         private DbContext context;
         public DbContext Context
         {
@@ -34,22 +38,30 @@ namespace SchoolApi.Controllers
         {
             using (Context = new SchoolContext())
             {
-                Context.Add(new DataEntry
+                try
                 {
-                    CreatedTime = DateTime.Now,
-                    RoomNumber = roomNumber,
-                    PhotoResistor = new PhotoResistor
-                    {
-                        LightLevel = int.Parse(light),
-                    },
-                    HumidityTempSensor = new HumidityTempSensor()
-                    {
-                        Humidity = float.Parse(humidity),
-                        Temperature = float.Parse(temperature)
-                    }
-                });
 
-                Context.SaveChanges();
+                    Context.Add(new DataEntry
+                    {
+                        CreatedTime = DateTime.Now,
+                        RoomNumber = roomNumber,
+                        PhotoResistor = new PhotoResistor
+                        {
+                            LightLevel = int.Parse(light),
+                        },
+                        HumidityTempSensor = new HumidityTempSensor()
+                        {
+                            Humidity = float.Parse(humidity),
+                            Temperature = float.Parse(temperature)
+                        }
+                    });
+
+                    Context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
 
             Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);

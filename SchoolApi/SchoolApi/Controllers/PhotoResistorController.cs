@@ -13,6 +13,11 @@ namespace SchoolApi.Controllers
     [Route("api/Resistor")]
     public class PhotoResistorController : ControllerBase, IFetchData<PhotoResistor>
     {
+        public PhotoResistorController(DbContext context)
+        {
+            Context = context;
+        }
+
         private DbContext context;
         public DbContext Context
         {
@@ -30,9 +35,13 @@ namespace SchoolApi.Controllers
         }
 
         [HttpGet]
-        public ICollection<PhotoResistor> GetData(string roomNumber)
+        public List<PhotoResistor> GetData(string roomNumber)
         {
-            throw new NotImplementedException();
+            List<PhotoResistor> resistors = ((SchoolContext)Context).DataEntry
+                .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                .Select(x => x.PhotoResistor).ToList();
+
+            return resistors;
         }
     }
 }
