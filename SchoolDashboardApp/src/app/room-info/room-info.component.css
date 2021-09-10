@@ -13,3 +13,19 @@ mat-grid-tile {
       min-width: 100%;
       min-height: 100%;
   }
+
+
+  .RoomDiv{
+      width: 100%;
+      height:100%;
+      flex-direction: column;
+  }
+
+  p {
+      margin:auto;
+  }
+
+  h2 {
+      margin:auto;
+  }
+
