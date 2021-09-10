@@ -49,7 +49,7 @@ namespace SchoolApi.Controllers
                 try
                 {
 
-                    //if room number is null or wasn't specified, get all rooms
+                    //if room number is null or wasn't specified, get all rooms instead
                     if (roomNumber != null)
                     {
                         return ((SchoolContext)Context).DataEntry

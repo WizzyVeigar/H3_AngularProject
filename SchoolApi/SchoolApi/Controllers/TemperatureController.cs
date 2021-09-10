@@ -35,11 +35,19 @@ namespace SchoolApi.Controllers
         [HttpGet]
         public List<HumidityTempSensor> GetData(string roomNumber)
         {
-            List<HumidityTempSensor> tempSensors = ((SchoolContext)Context).DataEntry
-                .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
-                .Select(x => x.HumidityTempSensor).ToList();
+            try
+            {
+                List<HumidityTempSensor> tempSensors = ((SchoolContext)Context).DataEntry
+                    .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                    .Select(x => x.HumidityTempSensor).ToList();
 
-            return tempSensors;
+                return tempSensors;
+            }
+            catch (InvalidCastException)
+            {
+                //Log error
+                return null;
+            }
         }
     }
 }

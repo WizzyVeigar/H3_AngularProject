@@ -34,11 +34,19 @@ namespace SchoolApi.Controllers
         [HttpGet]
         public List<PhotoResistor> GetData(string roomNumber)
         {
-            List<PhotoResistor> resistors = ((SchoolContext)Context).DataEntry
-                .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
-                .Select(x => x.PhotoResistor).ToList();
+            try
+            {
+                List<PhotoResistor> resistors = ((SchoolContext)Context).DataEntry
+                    .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                    .Select(x => x.PhotoResistor).ToList();
 
-            return resistors;
+                return resistors;
+            }
+            catch (InvalidCastException)
+            {
+                //log error
+                return null;
+            }
         }
     }
 }
