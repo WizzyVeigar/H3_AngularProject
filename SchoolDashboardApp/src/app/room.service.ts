@@ -6,18 +6,21 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class RoomService {
   constructor(private http: HttpClient) { 
-    this.getData().subscribe(e=>{
-      console.warn(e);
-    })
   }
-  getData(){
-    let url = "http://192.168.1.115:48935/api/Angular/GetRoom";
+  getData(roomNumber : String){
+    let url = "";
+    if(roomNumber != null){
+      url = "http://192.168.1.101:48935/api/Angular/GetRoom?roomNumber=" + roomNumber;
+    }
+    else {
+      url = "http://192.168.1.101:48935/api/Angular/GetRoom";
+    }
     return this.http.get<RoomObj>(url);
   }
 }
 
 export class RoomObj {
   roomNumber: string
-  CreatedTime: Date
+  createdTime: Date
   humidId: string
 }
