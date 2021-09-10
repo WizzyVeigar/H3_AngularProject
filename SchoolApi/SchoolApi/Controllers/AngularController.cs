@@ -28,15 +28,18 @@ namespace SchoolApi.Controllers
             {
                 return context;
             }
-
-
-
             set
             {
                 context = value;
             }
         }
 
+        
+        /// <summary>
+        /// Gets all entries of a specific room, or if not defined, all rooms with all entries
+        /// </summary>
+        /// <param name="roomNumber">The specified room's number</param>
+        /// <returns>Returns a list of Entries, if an error occurs; return null</returns>
         [Route("GetRoom")]
         [HttpGet]
         public List<DataEntry> GetDataEntries(string roomNumber)
@@ -66,6 +69,11 @@ namespace SchoolApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the latest recorded value of a single room
+        /// </summary>
+        /// <param name="roomNumber">The room's number of which entry you want to find</param>
+        /// <returns>Returns the latest data entry</returns>
         [Route("LatestSingle")]
         [HttpGet]
         public DataEntry GetLatestEntrySingleRoom(string roomNumber)
@@ -113,7 +121,7 @@ namespace SchoolApi.Controllers
 
                     for (int i = 0; i < ((SchoolContext)Context).DataEntry.Count(); i++)
                     {
-                        DataEntry entry = ((SchoolContext)Context).DataEntry.ElementAt<DataEntry>(i);
+                        DataEntry entry = ((SchoolContext)Context).DataEntry.ElementAt(i);
 
 
                         ((SchoolContext)Context).DataEntry.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber);

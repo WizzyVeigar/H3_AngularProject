@@ -25,7 +25,6 @@ namespace SchoolApi.Controllers
             {
                 return context;
             }
-
             set
             {
                 context = value;
