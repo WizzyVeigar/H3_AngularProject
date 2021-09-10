@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { RoomInfoComponent } from './room-info/room-info.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatGridListModule } from '@angular/material/grid-list'; 
+import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
@@ -19,7 +20,8 @@ import { DatePipe } from '@angular/common';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTableModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
