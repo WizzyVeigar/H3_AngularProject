@@ -6,18 +6,32 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class RoomService {
   constructor(private http: HttpClient) { 
-    this.getData().subscribe(e=>{
-      console.warn(e);
-    })
   }
-  getData(){
-    let url = "http://192.168.1.115:48935/api/Angular/GetRoom";
+  getData(GetAllEntries : Boolean,roomNumber? : String){
+    let url = "";
+    if(!GetAllEntries){
+      url = "http://192.168.1.101:48935/api/Angular/LatestSingle?roomNumber=" + roomNumber;
+    }
+    else {
+      url = "http://192.168.1.101:48935/api/Angular/GetRoom?roomNumber=" + roomNumber;
+    }
     return this.http.get<RoomObj>(url);
   }
 }
 
 export class RoomObj {
   roomNumber: string
-  CreatedTime: Date
+  createdTime: Date
   humidId: string
+  humidityTempSensor : HumidityTempSensor
+  photoResistor : photoResistor
+}
+
+export class HumidityTempSensor {
+  humidity:string
+  temperature:string
+}
+
+export class photoResistor {
+  lightLevel:string
 }

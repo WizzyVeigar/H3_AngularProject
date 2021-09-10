@@ -83,7 +83,7 @@ namespace SchoolApi.Controllers
                 try
                 {
                     List<DataEntry> collection = ((SchoolContext)Context).DataEntry
-                        .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower()).ToList();
+                        .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower()).Include(e=>e.HumidityTempSensor).Include(e=>e.PhotoResistor).ToList();
 
                     DataEntry entry = null;
                     for (int i = 0; i < collection.Count; i++)
@@ -118,20 +118,9 @@ namespace SchoolApi.Controllers
                 try
                 {
                     List<DataEntry> entries = null;
+                    var entriestemp = ((SchoolContext) Context).DataEntry;
+                    entries = entriestemp.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber).ToList();
 
-                    for (int i = 0; i < ((SchoolContext)Context).DataEntry.Count(); i++)
-                    {
-                        DataEntry entry = ((SchoolContext)Context).DataEntry.ElementAt(i);
-
-
-                        ((SchoolContext)Context).DataEntry.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber);
-
-                        //for (int j = 0; j < entries.Count; j++)
-                        //{
-
-                        //}
-
-                    }
                     return entries;
                 }
                 catch (Exception e)
