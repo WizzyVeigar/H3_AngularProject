@@ -10,10 +10,10 @@ export class RoomService {
   getData(GetAllEntries : Boolean,roomNumber? : String){
     let url = "";
     if(!GetAllEntries){
-      url = "http://192.168.1.101:48935/api/Angular/LatestSingle?roomNumber=" + roomNumber;
+      url = "http://localhost:48935/api/Angular/LatestSingle?roomNumber=" + roomNumber;
     }
     else {
-      url = "http://192.168.1.101:48935/api/Angular/GetRoom?roomNumber=" + roomNumber;
+      url = "http://localhost:48935/api/Angular/GetRoom?roomNumber=" + roomNumber;
     }
     return this.http.get<RoomObj>(url);
   }

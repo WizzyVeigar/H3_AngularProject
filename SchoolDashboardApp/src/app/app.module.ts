@@ -9,19 +9,31 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { LoginComponent } from './login/login.component';
+import { FormsModule } from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RoomInfoComponent
+    RoomInfoComponent,
+    LoginComponent
   ],
   imports: [
     HttpClientModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatCardModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    RouterModule,
     MatGridListModule,
-    MatTableModule
+    MatTableModule,
+    FormsModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

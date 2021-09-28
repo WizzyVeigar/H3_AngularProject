@@ -1,22 +1,28 @@
 .map_image {
-    width: 50%;
-    height:50%;
+    box-shadow: 0px 0px 15px 5px #000000;
+    width: 60%;
+    height:60%;
 }
 
 mat-grid-tile {
-    background: red;
+    background: lightslategray;
   }
 
-  .internalMatGrid{  border:1px solid red; min-width:100%; max-height: 100%;}
+  .internalMatGrid{ min-width:100%; max-height: 100%;}
 
   :host {
       min-width: 100%;
       min-height: 100%;
   }
 
+  table {
+      width: 90%;
+  }
 
   .RoomDiv{
 
       flex-direction: column;
   }
+
+  
 
