@@ -34,7 +34,7 @@ namespace SchoolApi.Controllers
             }
         }
 
-        
+
         /// <summary>
         /// Gets all entries of a specific room, or if not defined, all rooms with all entries
         /// </summary>
@@ -44,29 +44,27 @@ namespace SchoolApi.Controllers
         [HttpGet]
         public List<DataEntry> GetDataEntries(string roomNumber)
         {
-            using (Context = new SchoolContext())
-            {
-                try
-                {
 
-                    //if room number is null or wasn't specified, get all rooms instead
-                    if (roomNumber != null)
-                    {
-                        return ((SchoolContext)Context).DataEntry
-                            .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
-                            .Include(x => x.HumidityTempSensor)
-                            .Include(x => x.PhotoResistor).ToList();
-                    }
+            try
+            {
+                //if room number is null or wasn't specified, get all rooms instead
+                if (roomNumber != null)
+                {
                     return ((SchoolContext)Context).DataEntry
+                        .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
                         .Include(x => x.HumidityTempSensor)
                         .Include(x => x.PhotoResistor).ToList();
                 }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    return null;
-                }
+                return ((SchoolContext)Context).DataEntry
+                    .Include(x => x.HumidityTempSensor)
+                    .Include(x => x.PhotoResistor).ToList();
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -78,57 +76,54 @@ namespace SchoolApi.Controllers
         [HttpGet]
         public DataEntry GetLatestEntrySingleRoom(string roomNumber)
         {
-            using (Context = new SchoolContext())
+            try
             {
-                try
-                {
-                    List<DataEntry> collection = ((SchoolContext)Context).DataEntry
-                        .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower()).Include(e=>e.HumidityTempSensor).Include(e=>e.PhotoResistor).ToList();
+                List<DataEntry> collection = ((SchoolContext)Context).DataEntry
+                    .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower()).Include(e => e.HumidityTempSensor).Include(e => e.PhotoResistor).ToList();
 
-                    DataEntry entry = null;
-                    for (int i = 0; i < collection.Count; i++)
+                DataEntry entry = null;
+                for (int i = 0; i < collection.Count; i++)
+                {
+                    DataEntry dbData = collection[i];
+                    //Give it the first value in the List, if there are no elements, we return null in exception
+                    if (i == 0)
+                        entry = dbData;
+
+                    if (entry.CreatedTime < dbData.CreatedTime)
                     {
-                        DataEntry dbData = collection[i];
-                        //Give it the first value in the List, if there are no elements, we return null in exception
-                        if (i == 0)
-                            entry = dbData;
-
-                        if (entry.CreatedTime < dbData.CreatedTime)
-                        {
-                            entry = dbData;
-                        }
+                        entry = dbData;
                     }
-                    return entry;
+                }
+                return entry;
 
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    return null;
-                }
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
         }
 
         [Route("LatestAll")]
         [HttpGet]
         public List<DataEntry> GetLatestEntryAllRooms()
         {
-            using (Context = new SchoolContext())
+            try
             {
-                try
-                {
-                    List<DataEntry> entries = null;
-                    var entriestemp = ((SchoolContext) Context).DataEntry;
-                    entries = entriestemp.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber).ToList();
 
-                    return entries;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    return null;
-                }
+                List<DataEntry> entries = null;
+                var entriestemp = ((SchoolContext)Context).DataEntry;
+                entries = entriestemp.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber).ToList();
+
+                return entries;
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
         }
     }
 }

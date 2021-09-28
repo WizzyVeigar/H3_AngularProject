@@ -75,6 +75,19 @@ namespace SchoolApi.Migrations
                     b.ToTable("PhotoResistor");
                 });
 
+            modelBuilder.Entity("SchoolApi.Models.User", b =>
+                {
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Username");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("SchoolApi.Models.DataEntry", b =>
                 {
                     b.HasOne("SchoolApi.Models.HumidityTempSensor", "HumidityTempSensor")

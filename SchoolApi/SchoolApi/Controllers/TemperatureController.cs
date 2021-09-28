@@ -12,7 +12,7 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TemperatureController : ControllerBase, IFetchData<HumidityTempSensor>
+    public class TemperatureController : ControllerBase, IFetchDataByRoomNumber<HumidityTempSensor>
     {
         public TemperatureController(DbContext context)
         {

@@ -18,6 +18,8 @@ namespace SchoolApi
         public DbSet<PhotoResistor> PhotoResistor { get; set; }
         public DbSet<DataEntry> DataEntry { get; set; }
 
+        public DbSet<User> User { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
