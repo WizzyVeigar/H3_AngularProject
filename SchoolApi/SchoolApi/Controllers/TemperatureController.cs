@@ -12,7 +12,7 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TemperatureController : ControllerBase, IFetchData<HumidityTempSensor>
+    public class TemperatureController : ControllerBase, IFetchDataByRoomNumber<HumidityTempSensor>
     {
         public TemperatureController(DbContext context)
         {
@@ -26,9 +26,6 @@ namespace SchoolApi.Controllers
             {
                 return context;
             }
-
-
-
             set
             {
                 context = value;
@@ -38,7 +35,19 @@ namespace SchoolApi.Controllers
         [HttpGet]
         public List<HumidityTempSensor> GetData(string roomNumber)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<HumidityTempSensor> tempSensors = ((SchoolContext)Context).DataEntry
+                    .Where(x => x.RoomNumber.ToLower() == roomNumber.ToLower())
+                    .Select(x => x.HumidityTempSensor).ToList();
+
+                return tempSensors;
+            }
+            catch (InvalidCastException)
+            {
+                //Log error
+                return null;
+            }
         }
     }
 }

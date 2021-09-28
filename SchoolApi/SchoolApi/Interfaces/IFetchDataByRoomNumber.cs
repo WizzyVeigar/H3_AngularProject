@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace SchoolApi.Interfaces
 {
-    interface IFetchData<T>
+    //Used for when a controller fetches a certain object, depending on a roomNumber
+    interface IFetchDataByRoomNumber<T>
     {
         List<T> GetData(string roomNumber);
     }

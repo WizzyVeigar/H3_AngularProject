@@ -25,7 +25,6 @@ namespace SchoolApi.Controllers
             {
                 return context;
             }
-
             set
             {
                 context = value;
@@ -36,33 +35,31 @@ namespace SchoolApi.Controllers
         [Route("Save")]
         public string PostTemperature(string temperature, string humidity, string light, string roomNumber)
         {
-            using (Context = new SchoolContext())
+            try
             {
-                try
-                {
 
-                    Context.Add(new DataEntry
+                Context.Add(new DataEntry
+                {
+                    CreatedTime = DateTime.Now,
+                    RoomNumber = roomNumber,
+                    PhotoResistor = new PhotoResistor
                     {
-                        CreatedTime = DateTime.Now,
-                        RoomNumber = roomNumber,
-                        PhotoResistor = new PhotoResistor
-                        {
-                            LightLevel = int.Parse(light),
-                        },
-                        HumidityTempSensor = new HumidityTempSensor()
-                        {
-                            Humidity = float.Parse(humidity),
-                            Temperature = float.Parse(temperature)
-                        }
-                    });
+                        LightLevel = int.Parse(light),
+                    },
+                    HumidityTempSensor = new HumidityTempSensor()
+                    {
+                        Humidity = float.Parse(humidity),
+                        Temperature = float.Parse(temperature)
+                    }
+                });
 
-                    Context.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
+                Context.SaveChanges();
             }
+            catch (Exception)
+            {
+                return null;
+            }
+
 
             Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);
             return temperature + " and this " + humidity + " and light: " + light;
