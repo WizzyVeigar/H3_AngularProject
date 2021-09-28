@@ -12,6 +12,7 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class LoginController : Controller, IHaveDbContext
     {
         private DbContext context;
@@ -34,7 +35,7 @@ namespace SchoolApi.Controllers
 
 
         [HttpPost]
-        public IActionResult Login([FromBody] User userFromFrom)
+        public bool Login([FromBody] User userFromFrom)
         {
             try
             {
@@ -42,22 +43,20 @@ namespace SchoolApi.Controllers
                 User dbUser = manager.GetDatabaseUserFromUsername(userFromFrom.Username);
 
                 if (dbUser == null)
-                    return NotFound($"Login was not successful, [{userFromFrom.Username}] does not exist");
+                    return false;
 
-                if (manager.VerifyLogin(userFromFrom.Password, dbUser.Password))
-                    return Ok($"Login was successful! Welcome {userFromFrom.Username}");
-                else
-                    return Unauthorized("Password is wrong, try again!");
+                return manager.VerifyLogin(userFromFrom.Password, dbUser.Password);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest("Something went wrong, please try again!\n" + e.Message);
+                return false;
             }
         }
 
         [HttpPost]
         [Route("Register")]
+        [ApiKeyAuth(key = "Register")]
         public IActionResult CreateUser(User user)
         {
             try
@@ -65,7 +64,7 @@ namespace SchoolApi.Controllers
                 UserManager manager = new UserManager((SchoolContext)Context);
 
                 if (manager.CreateUser(user.Username, user.Password))
-                    return Ok();
+                    return Ok(user.Username + " was created successfully");
                 else
                     return BadRequest("That username is already taken");
             }
