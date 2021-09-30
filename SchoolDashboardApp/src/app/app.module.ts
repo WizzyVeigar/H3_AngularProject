@@ -18,6 +18,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { APP_INITIALIZER } from '@angular/core';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
+
+export function getToken(): string {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -38,9 +45,19 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     MatGridListModule,
     MatTableModule,
-    FormsModule
+    FormsModule,
+    JwtModule.forRoot({
+      config:{
+        tokenGetter: getToken
+      }
+    })
   ],
-  providers: [DatePipe,LoginService],
+  providers: [
+    DatePipe,
+    LoginService,
+    CookieService,
+    JwtHelperService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
