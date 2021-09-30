@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SchoolApi.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SchoolApi
@@ -34,35 +35,61 @@ namespace SchoolApi
             services.AddCors(options => options.AddDefaultPolicy(
                 builder => builder.AllowAnyOrigin()));
 
-            services.AddSwaggerGen(c =>
+            services.AddAuthentication(option =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolApi", Version = "v1" });
-
-                c.AddSecurityDefinition("Register", new OpenApiSecurityScheme
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    Description = @"Our api key",
-                    Name = "Register",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Register"
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            services.AddSwaggerGen(c =>
                 {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolApi", Version = "v1" });
+
+                    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
                     {
-                          new OpenApiSecurityScheme
+                        Description = @"Our api key for authorized users only",
+                        Name = "Register",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "apiKey"
+                    });
+
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                    {
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer",
+                        BearerFormat = "JWT",
+                        In = ParameterLocation.Header,
+                        Description = "Usage: Bearer [token]",
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
                             {
                                 Reference = new OpenApiReference
                                 {
                                     Type = ReferenceType.SecurityScheme,
-                                    Id = "Register"
+                                    Id = "Bearer"
                                 }
                             },
                             new string[] {}
-
-                    }
+                        }
+                    });
                 });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,6 +109,7 @@ namespace SchoolApi
             app.UseCors();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

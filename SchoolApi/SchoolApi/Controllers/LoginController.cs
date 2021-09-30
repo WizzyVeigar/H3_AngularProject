@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SchoolApi.Controllers
 {
@@ -15,8 +15,11 @@ namespace SchoolApi.Controllers
 
     public class LoginController : Controller, IHaveDbContext
     {
-        private DbContext context;
+        private UserManager userManager;
+        private TokenManager tokenManager;
+        private IConfiguration config;
 
+        private DbContext context;
         public DbContext Context
         {
             get
@@ -28,29 +31,75 @@ namespace SchoolApi.Controllers
                 context = value;
             }
         }
-        public LoginController(DbContext context)
+
+        //Di of context and config
+        public LoginController(DbContext context, IConfiguration config)
         {
             Context = context;
+            this.config = config;
         }
 
 
         [HttpPost]
-        public bool Login([FromBody] User userFromFrom)
+        public IActionResult Login([FromBody] User userFrom)
         {
             try
             {
-                UserManager manager = new UserManager((SchoolContext)Context);
-                User dbUser = manager.GetDatabaseUserFromUsername(userFromFrom.Username);
+                using (userManager = new UserManager((SchoolContext)Context))
+                {
+                    User dbUser = userManager.GetDatabaseUserFromUsername(userFrom.Username);
 
-                if (dbUser == null)
-                    return false;
+                    if (dbUser != null)
+                    {
 
-                return manager.VerifyLogin(userFromFrom.Password, dbUser.Password);
+                        if (userManager.VerifyLogin(userFrom.Password, dbUser.Password))
+                        {
+                            tokenManager = new TokenManager(config);
+                            DateTime expDate = DateTime.Now.AddMinutes(15);
 
+                            IssuedToken token = tokenManager.CreateToken(userFrom.Username, expDate);
+
+                            ((SchoolContext)Context).IssuedToken.Add(token);
+                            ((SchoolContext)Context).SaveChanges();
+                            return Ok(new { Token = token.TokenString });
+                        }
+                    }
+                    return Unauthorized();
+                }
             }
-            catch (Exception)
+            catch (ArgumentNullException e)
             {
-                return false;
+                return BadRequest(e.Message);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Get the username of a user, specified by a token they're holding
+        /// </summary>
+        /// <param name="tokenString">The token value the user is holding</param>
+        /// <returns>The username of the token holder</returns>
+        [HttpPost]
+        [Route("IsLoggedIn")]
+        public IActionResult IsLoggedIn(string tokenString)
+        {
+            try
+            {
+                IssuedToken userToken = ((SchoolContext)Context).IssuedToken.Where(token => token.TokenString == tokenString).FirstOrDefault();
+                if (userToken != null)
+                {
+                    tokenManager = new TokenManager(config);
+                    tokenManager.RefreshToken(userToken);
+
+                    Context.SaveChanges();
+                    return Ok(new { Token = userToken.TokenString, User = userToken.Username });
+                }
+                return Unauthorized("The token string is not recognized");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 
@@ -59,19 +108,21 @@ namespace SchoolApi.Controllers
         [ApiKeyAuth(key = "Register")]
         public IActionResult CreateUser(User user)
         {
-            try
+            using (UserManager manager = new UserManager((SchoolContext)Context))
             {
-                UserManager manager = new UserManager((SchoolContext)Context);
-
-                if (manager.CreateUser(user.Username, user.Password))
-                    return Ok(user.Username + " was created successfully");
-                else
-                    return BadRequest("That username is already taken");
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Internal server error. Something went wrong\n" + e.Message);
+                try
+                {
+                    if (manager.CreateUser(user.Username, user.Password))
+                        return Ok(user.Username + " was created successfully");
+                    else
+                        return BadRequest("That username is already taken");
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, "Internal server error. Something went wrong\n" + e.Message);
+                }
             }
         }
+        
     }
 }

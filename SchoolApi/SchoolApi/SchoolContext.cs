@@ -17,8 +17,8 @@ namespace SchoolApi
         public DbSet<HumidityTempSensor> HumidityTempSensor { get; set; }
         public DbSet<PhotoResistor> PhotoResistor { get; set; }
         public DbSet<DataEntry> DataEntry { get; set; }
-
         public DbSet<User> User { get; set; }
+        public DbSet<IssuedToken> IssuedToken { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,6 +30,11 @@ namespace SchoolApi
         {
             modelBuilder.Entity<DataEntry>()
                 .HasKey(c => new {c.RoomNumber, c.CreatedTime});
+            
+            //Using surrogate id, instead of a long tokenstring as PK
+            modelBuilder.Entity<IssuedToken>()
+                .Property<int>("Id");
+            modelBuilder.Entity<IssuedToken>().HasKey("Id");
         }
     }
 }
