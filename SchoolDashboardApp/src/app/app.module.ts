@@ -10,9 +10,12 @@ import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
+import { LoginService } from './login.service';
 import { FormsModule } from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldControl } from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 
@@ -24,6 +27,8 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     HttpClientModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatCardModule,
@@ -35,7 +40,7 @@ import { RouterModule } from '@angular/router';
     MatTableModule,
     FormsModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe,LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

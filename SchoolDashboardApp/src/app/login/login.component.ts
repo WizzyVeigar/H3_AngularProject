@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {userObj,LoginService} from '../login.service'
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private loginService: LoginService) { }
 
   username : string
   password : string
@@ -17,11 +18,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() : void{
-    if(this.username == 'admin' && this.password == 'admin'){
-      this.router.navigate(["room"]);
-    }else {
-      alert("Invalid Credentials")
-    }
+    var temp
+    this.loginService.verifyLogin(this.username,this.password).subscribe(data=>{
+    })
   }
 
 }
