@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SchoolApi
 {
-    public class UserManager
+    public class UserManager : IDisposable
     {
         private SchoolContext context;
         public UserManager(SchoolContext con)
@@ -36,6 +36,11 @@ namespace SchoolApi
                 return true;
             }
             return false;
+        }
+
+        public void Dispose()
+        {
+            context.Dispose();
         }
     }
 }
