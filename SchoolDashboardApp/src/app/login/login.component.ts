@@ -21,15 +21,15 @@ export class LoginComponent implements OnInit {
 
   login() : void{
     this.loginService.verifyLogin(this.username,this.password).subscribe(
-      (response:any) => {
-        if(response){
+      res => {
+        console.log(res)
+        if(res != '0'){
           this.router.navigate(['room']);
-          this.cookieService.set('IsLogged','eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTYzMjk4Njk4NCwiZXhwIjoxNjMyOTkwNTg0fQ.LLL6Z7jO_rFHd0lgga-x_9c9V--aERwdtEycutw-32U')
+          this.cookieService.set('IsLogged',res['token'] + '')
         }else{
           this.router.navigate(['login'])
         }
       }
     )
   }
-
 }

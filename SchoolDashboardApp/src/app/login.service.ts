@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { BehaviorSubject,Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject,observable,Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -10,6 +10,7 @@ export class userObj {
 }
 
 @Injectable()
+
 
 
 export class LoginService {
@@ -27,6 +28,9 @@ export class LoginService {
       (response:any) => {
         return response
       }
-    ));
+    ),
+    catchError((err: HttpErrorResponse)=>{
+      return '0';
+    }));
   }
 }
