@@ -23,7 +23,7 @@ namespace SchoolApi
             {
                 //Dependency inject the config object
                 IConfiguration config = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-                //Get the potential keys from appsettings.json
+                //Get the potential key from appsettings.json
                 string apiValue = config.GetValue<string>("ApiKeys:" + Key);
 
                 if (apiValue != potentialApiValue)
@@ -31,7 +31,7 @@ namespace SchoolApi
                     context.Result = new UnauthorizedResult();
                     return;
                 }
-
+                //Run next if no errors occurred
                 await next();
             }
 

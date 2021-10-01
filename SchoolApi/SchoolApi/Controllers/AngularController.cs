@@ -113,12 +113,48 @@ namespace SchoolApi.Controllers
         {
             try
             {
+                SchoolContext con = (SchoolContext)Context;
 
-                List<DataEntry> entries = null;
-                var entriestemp = ((SchoolContext)Context).DataEntry;
-                entries = entriestemp.OrderBy(x => x.CreatedTime).ThenBy(x => x.RoomNumber).ToList();
+                List<DataEntry> sortedEntries = new List<DataEntry>();
 
-                return entries;
+                var efEntries = con.DataEntry
+                    .Include(x => x.HumidityTempSensor)
+                    .Include(x => x.PhotoResistor)
+                    .OrderBy(x => x.RoomNumber)
+                    .ThenByDescending(x => x.CreatedTime)
+                    .ToList();
+
+                //var efEntries = (from dataentry in con.DataEntry
+
+                //                 join tempSensor in con.HumidityTempSensor
+                //                 on dataentry.HumidId equals tempSensor.Id
+
+                //                 join photoResistor in con.PhotoResistor
+                //                 on dataentry.PhotoResId equals photoResistor.Id
+
+                //                 orderby dataentry.RoomNumber, dataentry.CreatedTime
+                //                 descending
+
+                //                 select dataentry).ToList();
+
+                for (int i = 0; i < efEntries.Count(); i++)
+                {
+                    bool exists = false;
+
+                    for (int j = 0; j < sortedEntries.Count; j++)
+                    {
+                        if (efEntries.ElementAt(i).RoomNumber == sortedEntries[j].RoomNumber)
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists)
+                        sortedEntries.Add(efEntries.ElementAt(i));
+                }
+
+                return sortedEntries;
             }
             catch (Exception e)
             {

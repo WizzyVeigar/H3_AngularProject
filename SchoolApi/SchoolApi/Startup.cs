@@ -35,48 +35,51 @@ namespace SchoolApi
             services.AddCors(options => options.AddDefaultPolicy(
                 builder => builder.AllowAnyOrigin().AllowAnyHeader()));
 
-            //services.AddAuthentication(option =>
-            //{
-            //    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(options =>
-            //{
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = false,
-            //        ValidateIssuerSigningKey = true,
-            //        ValidIssuer = Configuration["Jwt:Issuer"],
-            //        ValidAudience = Configuration["Jwt:Issuer"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-            //    };
-            //});
+            //services.AddAuthentication();
+            services.AddAuthorization();
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
 
             services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolApi", Version = "v1" });
+
+                swagger.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
                 {
-                    swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolApi", Version = "v1" });
+                    Description = @"Our api key for authorized users only",
+                    Name = "Register",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "apiKey"
+                });
 
-                    swagger.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
-                    {
-                        Description = @"Our api key for authorized users only",
-                        Name = "Register",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.ApiKey,
-                        Scheme = "apiKey"
-                    });
-                    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-                    {
-                        Name = "Authorization",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.ApiKey,
-                        Scheme = "Bearer",
-                        BearerFormat = "JWT",
-                        Description = "Usage: Bearer [token]",
-                    });
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Description = "Usage: Bearer [token]",
+                });
 
-                    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                         {
                             new OpenApiSecurityScheme
                             {
@@ -88,8 +91,22 @@ namespace SchoolApi
                             },
                             Array.Empty<string>()
                         }
-                    });
                 });
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "ApiKey"
+                                }
+                            },
+                            Array.Empty<string>()
+                        }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,11 +122,11 @@ namespace SchoolApi
 
             //app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseRouting();
             app.UseCors();
-
             app.UseAuthorization();
-            //app.UseAuthentication();
+
 
             app.UseEndpoints(endpoints =>
             {
