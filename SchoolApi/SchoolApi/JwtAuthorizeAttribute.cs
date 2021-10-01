@@ -26,7 +26,7 @@ namespace SchoolApi
                 if (token == null || token.ToString() == "")
                 {
                     // not logged in
-                    context.Result = new JsonResult(new { message = "Forbidden. No token was found" }) { StatusCode = StatusCodes.Status403Forbidden };
+                    context.Result = new JsonResult(new { message = "No token was found" }) { StatusCode = StatusCodes.Status403Forbidden };
                 }
                 //Di our school context
                 SchoolContext schoolContext = context.HttpContext.RequestServices.GetService<SchoolContext>();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
@@ -28,14 +29,23 @@ namespace SchoolApi
 
                 if (apiValue != potentialApiValue)
                 {
-                    context.Result = new UnauthorizedResult();
+                    //The message and statuscode are split, so statuscode doesn't show in the response body
+                    context.Result = new JsonResult(new
+                    {
+                        message = "Forbidden. Api key is invalid"
+                    })
+                    { StatusCode = StatusCodes.Status403Forbidden };
                     return;
                 }
                 //Run next if no errors occurred
                 await next();
             }
 
-            context.Result = new UnauthorizedResult();
+            context.Result = context.Result = new JsonResult(new
+            {
+                message = "Forbidden. No api key was in the header 'Authorization'"
+            })
+            { StatusCode = StatusCodes.Status403Forbidden };
             return;
         }
     }

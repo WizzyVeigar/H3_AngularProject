@@ -29,12 +29,12 @@ namespace SchoolApi.Managers
             return new IssuedToken
             {
                 Username = username,
-                TokenString = GenerateJWTToken(expDate),
+                TokenString = GenerateJWTToken(expDate, username),
                 ExpiryDate = expDate
             };
         }
 
-        private string GenerateJWTToken(DateTime expiryDate)
+        private string GenerateJWTToken(DateTime expiryDate, string username)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["Jwt:Key"]));
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -45,12 +45,14 @@ namespace SchoolApi.Managers
               expires: expiryDate,
               signingCredentials: credentials);
 
+            token.Payload["name"] = username;
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
         public void RefreshToken(IssuedToken token)
         {
             DateTime expDate = DateTime.Now.AddMinutes(15);
-            token.TokenString = GenerateJWTToken(expDate);
+            token.TokenString = GenerateJWTToken(expDate, token.Username);
             token.ExpiryDate = expDate;
         }
     }
