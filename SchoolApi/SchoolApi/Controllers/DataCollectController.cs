@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SchoolApi.Controllers
 {
@@ -37,7 +36,6 @@ namespace SchoolApi.Controllers
         {
             try
             {
-
                 Context.Add(new DataEntry
                 {
                     CreatedTime = DateTime.Now,

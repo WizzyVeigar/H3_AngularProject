@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolApi.Interfaces;
 using SchoolApi.Models;
@@ -40,11 +42,11 @@ namespace SchoolApi.Controllers
         /// </summary>
         /// <param name="roomNumber">The specified room's number</param>
         /// <returns>Returns a list of Entries, if an error occurs; return null</returns>
-        [Route("GetRoom")]
         [HttpGet]
+        [JwtAuthorize]
+        [Route("GetRoom")]
         public List<DataEntry> GetDataEntries(string roomNumber)
         {
-
             try
             {
                 //if room number is null or wasn't specified, get all rooms instead
@@ -72,8 +74,8 @@ namespace SchoolApi.Controllers
         /// </summary>
         /// <param name="roomNumber">The room's number of which entry you want to find</param>
         /// <returns>Returns the latest data entry</returns>
-        [Route("LatestSingle")]
         [HttpGet]
+        [Route("LatestSingle")]
         public DataEntry GetLatestEntrySingleRoom(string roomNumber)
         {
             try
@@ -105,8 +107,8 @@ namespace SchoolApi.Controllers
 
         }
 
-        [Route("LatestAll")]
         [HttpGet]
+        [Route("LatestAll")]
         public List<DataEntry> GetLatestEntryAllRooms()
         {
             try

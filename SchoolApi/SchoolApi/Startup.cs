@@ -35,29 +35,29 @@ namespace SchoolApi
             services.AddCors(options => options.AddDefaultPolicy(
                 builder => builder.AllowAnyOrigin().AllowAnyHeader()));
 
-            services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
-            });
+            //services.AddAuthentication(option =>
+            //{
+            //    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(options =>
+            //{
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = false,
+            //        ValidateIssuerSigningKey = true,
+            //        ValidIssuer = Configuration["Jwt:Issuer"],
+            //        ValidAudience = Configuration["Jwt:Issuer"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+            //    };
+            //});
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(swagger =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolApi", Version = "v1" });
+                    swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "SchoolApi", Version = "v1" });
 
-                    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+                    swagger.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
                     {
                         Description = @"Our api key for authorized users only",
                         Name = "Register",
@@ -65,17 +65,17 @@ namespace SchoolApi
                         Type = SecuritySchemeType.ApiKey,
                         Scheme = "apiKey"
                     });
-
-                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                     {
                         Name = "Authorization",
+                        In = ParameterLocation.Header,
                         Type = SecuritySchemeType.ApiKey,
                         Scheme = "Bearer",
                         BearerFormat = "JWT",
-                        In = ParameterLocation.Header,
                         Description = "Usage: Bearer [token]",
                     });
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+
+                    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
                             new OpenApiSecurityScheme
@@ -86,7 +86,7 @@ namespace SchoolApi
                                     Id = "Bearer"
                                 }
                             },
-                            new string[] {}
+                            Array.Empty<string>()
                         }
                     });
                 });
@@ -109,7 +109,7 @@ namespace SchoolApi
             app.UseCors();
 
             app.UseAuthorization();
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
