@@ -1,8 +1,10 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SchoolApi.Interfaces;
+using SchoolApi.Managers;
 using SchoolApi.Models;
 using System;
 using System.Linq;
@@ -39,32 +41,35 @@ namespace SchoolApi.Controllers
             this.config = config;
         }
 
-
+        /// <summary>
+        /// try to login a user, returns a token if successfully logged in
+        /// </summary>
+        /// <param name="attemptedUser">potential User the client is trying to log in to</param>
+        /// <returns>Returns an Ok actionresult with a token if verified. Otherwise 401 unauthorized or 400 bad request</returns>
         [HttpPost]
-        public IActionResult Login([FromBody] User userFrom)
+        public IActionResult Login([FromBody] User attemptedUser)
         {
             try
             {
                 using (userManager = new UserManager((SchoolContext)Context))
                 {
-                    User dbUser = userManager.GetDatabaseUserFromUsername(userFrom.Username);
+                    User dbUser = userManager.GetDatabaseUserFromUsername(attemptedUser.Username);
 
                     if (dbUser != null)
                     {
-
-                        if (userManager.VerifyLogin(userFrom.Password, dbUser.Password))
+                        if (userManager.VerifyLogin(attemptedUser.Password, dbUser.Password))
                         {
                             tokenManager = new TokenManager(config);
                             DateTime expDate = DateTime.Now.AddMinutes(15);
 
-                            IssuedToken token = tokenManager.CreateToken(userFrom.Username, expDate);
+                            IssuedToken token = tokenManager.CreateToken(attemptedUser.Username, expDate);
 
                             ((SchoolContext)Context).IssuedToken.Add(token);
                             ((SchoolContext)Context).SaveChanges();
                             return Ok(new { Token = token.TokenString });
                         }
                     }
-                    return Unauthorized();
+                    return Forbid();
                 }
             }
             catch (ArgumentNullException e)
@@ -76,17 +81,21 @@ namespace SchoolApi.Controllers
 
 
         /// <summary>
-        /// Get the username of a user, specified by a token they're holding
+        /// Get the username and updated token of a user, specified by a token they're holding
         /// </summary>
         /// <param name="tokenString">The token value the user is holding</param>
         /// <returns>The username of the token holder</returns>
         [HttpPost]
+        [JwtAuthorize]
         [Route("IsLoggedIn")]
         public IActionResult IsLoggedIn(string tokenString)
         {
             try
             {
-                IssuedToken userToken = ((SchoolContext)Context).IssuedToken.Where(token => token.TokenString == tokenString).FirstOrDefault();
+                IssuedToken userToken = ((SchoolContext)Context).IssuedToken
+                    .Where(token => token.TokenString == tokenString)
+                    .FirstOrDefault();
+
                 if (userToken != null)
                 {
                     tokenManager = new TokenManager(config);
@@ -95,7 +104,7 @@ namespace SchoolApi.Controllers
                     Context.SaveChanges();
                     return Ok(new { Token = userToken.TokenString, User = userToken.Username });
                 }
-                return Unauthorized("The token string is not recognized");
+                return Forbid("The token string is not recognized");
             }
             catch (Exception e)
             {
@@ -103,9 +112,15 @@ namespace SchoolApi.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Register a user to the EF database. Must have the Register key in the header
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Register")]
-        [ApiKeyAuth(key = "Register")]
+        [ApiKeyAuth(Key = "Register")]
         public IActionResult CreateUser(User user)
         {
             using (UserManager manager = new UserManager((SchoolContext)Context))
