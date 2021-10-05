@@ -1,0 +1,5 @@
+C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi_Tests\obj\Debug\net5.0\SchoolApi_Tests.csproj.AssemblyReference.cache
+C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi_Tests\obj\Debug\net5.0\SchoolApi_Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi_Tests\obj\Debug\net5.0\SchoolApi_Tests.AssemblyInfoInputs.cache
+C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi_Tests\obj\Debug\net5.0\SchoolApi_Tests.AssemblyInfo.cs
+C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi_Tests\obj\Debug\net5.0\SchoolApi_Tests.csproj.CoreCompileInputs.cache

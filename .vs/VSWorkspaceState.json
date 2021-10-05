@@ -4,8 +4,9 @@
     "\\SchoolApi",
     "\\SchoolApi\\SchoolApi",
     "\\SchoolApi\\SchoolApi\\Controllers",
-    "\\SchoolApi\\SchoolApi\\Interfaces"
+    "\\SchoolApi\\SchoolApi\\Interfaces",
+    "\\SchoolApi\\SchoolApi_Test"
   ],
-  "SelectedNode": "\\SchoolApi\\SchoolApi.sln",
+  "SelectedNode": "\\SchoolApi\\SchoolApi_Test\\AuthorizationTests.cs",
   "PreviewInSolutionExplorer": false
 }
