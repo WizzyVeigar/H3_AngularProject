@@ -22,13 +22,8 @@ export class LoginComponent implements OnInit {
   login() : void{
     this.loginService.verifyLogin(this.username,this.password).subscribe(
       res => {
-        console.log(res)
-        if(res != '0'){
-          this.router.navigate(['room']);
-          this.cookieService.set('IsLogged',res['token'] + '')
-        }else{
-          this.router.navigate(['login'])
-        }
+        this.router.navigate(['room']);
+        this.cookieService.set('IsLogged',res['token'] + '')
       }
     )
   }
