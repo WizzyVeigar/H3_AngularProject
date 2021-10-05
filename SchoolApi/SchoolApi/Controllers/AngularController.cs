@@ -87,7 +87,7 @@ namespace SchoolApi.Controllers
                 for (int i = 0; i < collection.Count; i++)
                 {
                     DataEntry dbData = collection[i];
-                    //Give it the first value in the List, if there are no elements, we return null in exception
+                    //Give it the first value in the List. Ff there are no elements, we return null in exception
                     if (i == 0)
                         entry = dbData;
 
@@ -115,6 +115,7 @@ namespace SchoolApi.Controllers
             {
                 SchoolContext con = (SchoolContext)Context;
 
+                //Need to initialize the list for the coming loop
                 List<DataEntry> sortedEntries = new List<DataEntry>();
 
                 var efEntries = con.DataEntry
@@ -124,20 +125,7 @@ namespace SchoolApi.Controllers
                     .ThenByDescending(x => x.CreatedTime)
                     .ToList();
 
-                //var efEntries = (from dataentry in con.DataEntry
-
-                //                 join tempSensor in con.HumidityTempSensor
-                //                 on dataentry.HumidId equals tempSensor.Id
-
-                //                 join photoResistor in con.PhotoResistor
-                //                 on dataentry.PhotoResId equals photoResistor.Id
-
-                //                 orderby dataentry.RoomNumber, dataentry.CreatedTime
-                //                 descending
-
-                //                 select dataentry).ToList();
-
-                for (int i = 0; i < efEntries.Count(); i++)
+                for (int i = 0; i < efEntries.Count; i++)
                 {
                     bool exists = false;
 

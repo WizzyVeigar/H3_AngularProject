@@ -81,13 +81,15 @@ namespace SchoolApi.Controllers
 
 
         /// <summary>
-        /// Get the username and updated token of a user, specified by a token they're holding
+        /// Get the username and updated token of a user, specified by a token they're holding, 
+        /// refreshes the token if they're holding a valid one
         /// </summary>
         /// <param name="tokenString">The token value the user is holding</param>
         /// <returns>The username of the token holder</returns>
         [HttpPost]
         [JwtAuthorize]
         [Route("IsLoggedIn")]
+        //Maybe change name to RefreshToken?
         public IActionResult IsLoggedIn(string tokenString)
         {
             try
