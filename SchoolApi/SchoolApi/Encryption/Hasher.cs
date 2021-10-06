@@ -16,7 +16,10 @@ namespace SchoolApi.Encryption
         /// <returns>Returns the hashed passwrod</returns>
         public static string HashPassword(string password)
         {
-            return Crypt.EnhancedHashPassword(password, 12);
+            if (password.Length > 0)
+                return Crypt.EnhancedHashPassword(password, 12);
+            return null;
+
         }
 
         /// <summary>

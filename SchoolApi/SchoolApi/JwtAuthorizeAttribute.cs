@@ -36,12 +36,12 @@ namespace SchoolApi
 
                     if (user != null)
                     {
-                        context.Result = new JsonResult(new
-                        {
-                            message = "Acknowledged",
-                            username = user.Username,
-                            StatusCode = StatusCodes.Status200OK
-                        });
+                        //context.Result = new JsonResult(new
+                        //{
+                        //    message = "Acknowledged",
+                        //    username = user.Username,
+                        //    StatusCode = StatusCodes.Status200OK
+                        //});
                     }
                 }
             }

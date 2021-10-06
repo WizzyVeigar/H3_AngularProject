@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +17,19 @@ namespace SchoolApi.Controllers
     public class LoginController : Controller, IHaveDbContext
     {
         private UserManager userManager;
+        public UserManager UserManager
+        {
+            get
+            {
+                return userManager;
+            }
+
+            set
+            {
+                userManager = value;
+            }
+        }
+
         private TokenManager tokenManager;
         private IConfiguration config;
 
@@ -51,13 +63,13 @@ namespace SchoolApi.Controllers
         {
             try
             {
-                using (userManager = new UserManager((SchoolContext)Context))
+                using (UserManager = new UserManager((SchoolContext)Context))
                 {
-                    User dbUser = userManager.GetDatabaseUserFromUsername(attemptedUser.Username);
+                    User dbUser = UserManager.GetDatabaseUserFromUsername(attemptedUser.Username);
 
                     if (dbUser != null)
                     {
-                        if (userManager.VerifyLogin(attemptedUser.Password, dbUser.Password))
+                        if (UserManager.VerifyLogin(attemptedUser.Password, dbUser.Password))
                         {
                             tokenManager = new TokenManager(config);
                             DateTime expDate = DateTime.Now.AddMinutes(15);
@@ -87,7 +99,7 @@ namespace SchoolApi.Controllers
         /// <param name="tokenString">The token value the user is holding</param>
         /// <returns>The username of the token holder</returns>
         [HttpPost]
-        [JwtAuthorize]
+        //[JwtAuthorize]
         [Route("IsLoggedIn")]
         //Maybe change name to RefreshToken?
         public IActionResult IsLoggedIn(string tokenString)
@@ -140,6 +152,6 @@ namespace SchoolApi.Controllers
                 }
             }
         }
-        
+
     }
 }
