@@ -21,28 +21,26 @@ namespace SchoolApi
         {
             try
             {
-                //Get token from header
+                //Get token from incoming request header
                 string token = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-                if (token == null || token.ToString() == "")
+                if (token == null || token.ToString().Trim() == "")
                 {
                     // not logged in
                     context.Result = new JsonResult(new { message = "No token was found" }) { StatusCode = StatusCodes.Status403Forbidden };
                 }
                 //Di our school context
                 SchoolContext schoolContext = context.HttpContext.RequestServices.GetService<SchoolContext>();
-                using (UserManager manager = new UserManager(schoolContext))
-                {
-                    User user = manager.GetDatabaseUserFromTokenString(token);
+                UserManager manager = new UserManager(schoolContext);
 
-                    if (user != null)
+                User user = manager.GetDatabaseUserFromTokenString(token);
+
+                if (user == null)
+                {
+                    context.Result = new JsonResult(new
                     {
-                        //context.Result = new JsonResult(new
-                        //{
-                        //    message = "Acknowledged",
-                        //    username = user.Username,
-                        //    StatusCode = StatusCodes.Status200OK
-                        //});
-                    }
+                        message = "Forbidden, no user was found",
+                        StatusCode = StatusCodes.Status403Forbidden
+                    });
                 }
             }
             catch (Exception e)

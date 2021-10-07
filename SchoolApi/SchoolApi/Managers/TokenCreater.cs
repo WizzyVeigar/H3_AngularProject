@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SchoolApi.Managers
 {
-    public class TokenManager
+    public class TokenCreater
     {
 
         private IConfiguration config;
@@ -19,7 +19,7 @@ namespace SchoolApi.Managers
             get { return config; }
             set { config = value; }
         }
-        public TokenManager(IConfiguration config)
+        public TokenCreater(IConfiguration config)
         {
             Config = config;
         }

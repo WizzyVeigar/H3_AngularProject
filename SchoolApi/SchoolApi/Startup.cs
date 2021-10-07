@@ -30,8 +30,13 @@ namespace SchoolApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<SchoolContext>();
+            services.AddDbContext<SchoolContext>(x =>
+                x.UseSqlServer(
+                    "Data Source = (LocalDb)\\MSSQLLocalDB; Initial Catalog = SchoolDash; Integrated Security = true;"
+                ));
+
             services.AddScoped<DbContext, SchoolContext>();
+
             services.AddCors(options => options.AddDefaultPolicy(
                 builder => builder.AllowAnyOrigin().AllowAnyHeader()));
 

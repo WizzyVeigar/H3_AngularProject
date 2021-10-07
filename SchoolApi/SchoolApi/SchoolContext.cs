@@ -12,6 +12,7 @@ namespace SchoolApi
     {
         public SchoolContext() : base()
         {
+           
         }
 
         public SchoolContext(DbContextOptions options) : base(options)
@@ -25,10 +26,10 @@ namespace SchoolApi
         public virtual DbSet<IssuedToken> IssuedToken { get; set; }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source = (LocalDb)\\MSSQLLocalDB; Initial Catalog = SchoolDash; Integrated Security = true;");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    //optionsBuilder.UseSqlServer("Data Source = (LocalDb)\\MSSQLLocalDB; Initial Catalog = SchoolDash; Integrated Security = true;");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

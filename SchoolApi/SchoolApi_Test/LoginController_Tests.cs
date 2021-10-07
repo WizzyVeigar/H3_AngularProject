@@ -15,44 +15,69 @@ using NSubstitute.ReturnsExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using SchoolApi.Managers;
+using SchoolApi.Encryption;
 
 namespace SchoolApi_Test
 {
     public class LoginController_Tests
     {
-        [Test]
-        public void Login_IncorrectLogin()
-        {
+        //[Test]
+        //public void Login_IncorrectLogin()
+        //{
 
-        }
+        //}
 
-        //[TestCase("GetInvalidTestUsers")]
+        ////[TestCase("GetInvalidTestUsers")]
 
-        public void Login_CorrectLogin()
-        {
-        }
+        //public void Login_CorrectLogin()
+        //{
+        //}
 
-        [Test]
-        public void IsLoggedIn_SuccessfulRefresh()
-        {
+        //[Test]
+        //public void IsLoggedIn_SuccessfulRefresh()
+        //{
 
-        }
+        //}
 
         [TestCase("sadpidijdsada")]
         [TestCase("921038frosac0ivjpotmwsiPODJADPq0")]
         [TestCase("")]
         [TestCase("                                ")]
-        public void IsLoggedIn_InvalidTokenString()
+        public void IsLoggedIn_InvalidTokenStrings(string tokenString)
         {
+            IConfiguration config = Substitute.For<IConfiguration>();
+            var options = new DbContextOptionsBuilder<SchoolContext>()
+            .UseInMemoryDatabase(databaseName: "IssuedTokens")
+            .Options;
 
+            IssuedToken token = new IssuedToken
+            {
+                Username = "Test",
+                ExpiryDate = DateTime.Now,
+                TokenString = "IamALongToKEnString123"
+            };
+
+            using (var context = new SchoolContext(options))
+            {
+                context.IssuedToken.Add(token);
+
+                context.SaveChanges();
+
+                LoginController controller = Substitute.For<LoginController>(context, config);
+
+                bool actual = controller.IsLoggedIn(tokenString);
+
+                actual.ShouldBeFalse();
+            }
         }
 
         [Test]
-        public void CreateUser_InvalidUser()
+        public void CreateUser_FailOnSpaceOnlyAsUserNameAndPassword()
         {
-            var config = Substitute.For<IConfiguration>();
-            var context = Substitute.For<SchoolContext>();
-            User testUser = new User
+            IConfiguration config = Substitute.For<IConfiguration>();
+            SchoolContext context = Substitute.For<SchoolContext>();
+            
+            User userToCreate = new User
             {
                 Username = "",
                 Password = "  "
@@ -63,22 +88,22 @@ namespace SchoolApi_Test
 
             context.User.ReturnsNull();
 
-
             LoginController controller = new LoginController(context, config);
 
-            IActionResult actual = controller.Login(testUser);
+            IActionResult actual = controller.CreateUser(userToCreate);
 
-            actual.ShouldBeOfType(typeof(BadRequestObjectResult));
+            actual.ShouldBeOfType(typeof(BadRequestResult));
         }
 
         [Test]
         public void CreateUser_AlreadyTakenUser()
         {
-            var config = Substitute.For<IConfiguration>();
+            IConfiguration config = Substitute.For<IConfiguration>();
 
             var options = new DbContextOptionsBuilder<SchoolContext>()
             .UseInMemoryDatabase(databaseName: "users")
             .Options;
+
             User newUser = new User
             {
                 Username = "Patrick123",
@@ -92,6 +117,8 @@ namespace SchoolApi_Test
 
             using (var context = new SchoolContext(options))
             {
+                dbUser.Password = Hasher.HashPassword(dbUser.Password);
+
                 context.User.Add(dbUser);
 
                 context.SaveChanges();
@@ -102,21 +129,11 @@ namespace SchoolApi_Test
                 config["Jwt:Issuer"].Returns("https://localhost_Test:48935");
 
                 controller.UserManager = Substitute.For<UserManager>(context);
-                //dbUser = controller.UserManager.GetDatabaseUserFromUsername(newUser.Username);
 
-                IActionResult actual = controller.Login(newUser);
+                BadRequestResult actual = (BadRequestResult)controller.CreateUser(newUser);
 
-                actual.ShouldBeOfType(typeof(ForbidResult));
+                actual.ShouldBeOfType(typeof(BadRequestResult));
             }
-
         }
-
-        private IEnumerable<User> GetInvalidTestUsers()
-        {
-            yield return new User { Username = "Benny", Password = "hello" };
-            yield return new User { Username = "Kent", Password = "eybdoog" };
-        }
-
-
     }
 }
