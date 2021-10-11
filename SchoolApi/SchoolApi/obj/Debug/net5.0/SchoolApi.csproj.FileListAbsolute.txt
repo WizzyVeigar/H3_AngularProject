@@ -156,3 +156,4 @@ C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi\obj\Debug\n
 C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi\obj\Debug\net5.0\ref\SchoolApi.dll
 C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi\obj\Debug\net5.0\SchoolApi.pdb
 C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi\obj\Debug\net5.0\SchoolApi.genruntimeconfig.cache
+C:\Users\Kenn5073\Source\Repos\H3_AngularProject\SchoolApi\SchoolApi\obj\Debug\net5.0\SchoolApi.csproj.AssemblyReference.cache

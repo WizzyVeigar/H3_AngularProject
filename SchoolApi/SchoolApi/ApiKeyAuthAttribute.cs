@@ -37,7 +37,7 @@ namespace SchoolApi
                     { StatusCode = StatusCodes.Status403Forbidden };
                     return;
                 }
-                //Run next if no errors occurred
+                //Run the desired endpoint if no errors occurred
                 await next();
             }
 

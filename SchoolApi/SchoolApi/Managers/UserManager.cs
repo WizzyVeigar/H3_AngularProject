@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SchoolApi.Managers
 {
-    public class UserManager : IDisposable
+    public class UserManager
     {
         private SchoolContext context;
         public UserManager(SchoolContext con)
@@ -23,10 +23,10 @@ namespace SchoolApi.Managers
         public User GetDatabaseUserFromTokenString(string tokenString)
         {
             var data = (from user in context.User
-                       join token in context.IssuedToken
-                       on user.Username equals token.Username
-                       where token.TokenString == tokenString
-                       select new User {Username = user.Username, Password = user.Password }).SingleOrDefault();
+                        join token in context.IssuedToken
+                        on user.Username equals token.Username
+                        where token.TokenString == tokenString
+                        select new User { Username = user.Username, Password = user.Password }).SingleOrDefault();
 
             User u = (User)data;
             return u;
@@ -39,6 +39,8 @@ namespace SchoolApi.Managers
 
         public bool CreateUser(string username, string password)
         {
+            if (username.Trim() == string.Empty || password.Trim() == string.Empty)
+                return false;
             //Checks if username already exists
             if (GetDatabaseUserFromUsername(username) == null)
             {
@@ -48,12 +50,6 @@ namespace SchoolApi.Managers
                 return true;
             }
             return false;
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            context.Dispose();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +17,20 @@ namespace SchoolApi.Controllers
     public class LoginController : Controller, IHaveDbContext
     {
         private UserManager userManager;
-        private TokenManager tokenManager;
+        public UserManager UserManager
+        {
+            get
+            {
+                return userManager;
+            }
+
+            set
+            {
+                userManager = value;
+            }
+        }
+
+        private TokenCreater tokenManager;
         private IConfiguration config;
 
         private DbContext context;
@@ -51,26 +63,27 @@ namespace SchoolApi.Controllers
         {
             try
             {
-                using (userManager = new UserManager((SchoolContext)Context))
+                UserManager = new UserManager((SchoolContext)Context);
+
+
+                User dbUser = UserManager.GetDatabaseUserFromUsername(attemptedUser.Username);
+
+                if (dbUser != null)
                 {
-                    User dbUser = userManager.GetDatabaseUserFromUsername(attemptedUser.Username);
-
-                    if (dbUser != null)
+                    if (UserManager.VerifyLogin(attemptedUser.Password, dbUser.Password))
                     {
-                        if (userManager.VerifyLogin(attemptedUser.Password, dbUser.Password))
-                        {
-                            tokenManager = new TokenManager(config);
-                            DateTime expDate = DateTime.Now.AddMinutes(15);
+                        tokenManager = new TokenCreater(config);
+                        DateTime expDate = DateTime.Now.AddMinutes(15);
 
-                            IssuedToken token = tokenManager.CreateToken(attemptedUser.Username, expDate);
+                        IssuedToken token = tokenManager.CreateToken(attemptedUser.Username, expDate);
 
-                            ((SchoolContext)Context).IssuedToken.Add(token);
-                            ((SchoolContext)Context).SaveChanges();
-                            return Ok(new { Token = token.TokenString });
-                        }
+                        ((SchoolContext)Context).IssuedToken.Add(token);
+                        ((SchoolContext)Context).SaveChanges();
+                        return Ok(new { Token = token.TokenString });
                     }
-                    return Forbid();
                 }
+                return Forbid();
+
             }
             catch (ArgumentNullException e)
             {
@@ -87,10 +100,8 @@ namespace SchoolApi.Controllers
         /// <param name="tokenString">The token value the user is holding</param>
         /// <returns>The username of the token holder</returns>
         [HttpPost]
-        [JwtAuthorize]
         [Route("IsLoggedIn")]
-        //Maybe change name to RefreshToken?
-        public IActionResult IsLoggedIn(string tokenString)
+        public bool IsLoggedIn(string tokenString)
         {
             try
             {
@@ -100,17 +111,41 @@ namespace SchoolApi.Controllers
 
                 if (userToken != null)
                 {
-                    tokenManager = new TokenManager(config);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        [HttpGet]
+        [Route("RefreshToken")]
+        public IActionResult RefreshToken(string tokenString)
+        {
+            try
+            {
+                IssuedToken userToken = ((SchoolContext)Context).IssuedToken
+                        .Where(token => token.TokenString == tokenString)
+                        .FirstOrDefault();
+
+                if (userToken != null)
+                {
+
+                    tokenManager = new TokenCreater(config);
                     tokenManager.RefreshToken(userToken);
 
                     Context.SaveChanges();
                     return Ok(new { Token = userToken.TokenString, User = userToken.Username });
                 }
-                return Forbid("The token string is not recognized");
+                else
+                    return new BadRequestResult();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return new BadRequestResult();
             }
         }
 
@@ -125,21 +160,20 @@ namespace SchoolApi.Controllers
         [ApiKeyAuth(Key = "Register")]
         public IActionResult CreateUser(User user)
         {
-            using (UserManager manager = new UserManager((SchoolContext)Context))
+            UserManager = new UserManager((SchoolContext)Context);
+            try
             {
-                try
-                {
-                    if (manager.CreateUser(user.Username, user.Password))
-                        return Ok(user.Username + " was created successfully");
-                    else
-                        return BadRequest("That username is already taken");
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Internal server error. Something went wrong\n" + e.Message);
-                }
+                if (UserManager.CreateUser(user.Username, user.Password))
+                    return Ok(user.Username + " was created successfully");
+                else
+                    return new BadRequestResult();
             }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error. Something went wrong\n" + e.Message);
+            }
+
         }
-        
+
     }
 }
