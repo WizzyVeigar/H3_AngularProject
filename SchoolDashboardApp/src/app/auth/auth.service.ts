@@ -3,6 +3,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { LoginService } from '../login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,27 +13,29 @@ import { map, catchError } from 'rxjs/operators';
 
 export class AuthService {
 
-  constructor(public jwtHelper: JwtHelperService,private _cookieService: CookieService,private http: HttpClient) {
+  constructor(public jwtHelper: JwtHelperService,private _cookieService: CookieService,private http: HttpClient,private loginService:LoginService) {
     this.jwtHelper = new JwtHelperService();
    }
+   
+   jsonObj : any
 
-  public isAuthenticated() : boolean {
+  public async isAuthenticated() : Promise<boolean> {
     const token = this._cookieService.get('IsLogged');
-    var test = this.jwtHelper.decodeToken(token)
-    if(!this.jwtHelper.isTokenExpired(token)){
-      return true
-    }else{
-      let url = "http://localhost:48935/api/Login/IsLoggedIn?tokenString=" + token;
-      this.http.post(url,null).pipe(map(
-        (response:any) => {
-          console.log(response)
-          this._cookieService.set('IsLogged',response['token'])
-          return this.jwtHelper.isTokenExpired(token)
-        }
-      ))
+    if(token != ''){
+      if(!this.jwtHelper.isTokenExpired(token)){
+        return true
+      }else{
+        await this.SetNewLoggedInTokenAsCookie(token)
+        return true
+      }
     }
+    return false
+  }
 
-
-    return !this.jwtHelper.isTokenExpired(token);
+  public async SetNewLoggedInTokenAsCookie(token : any) : Promise<void> {
+    this.loginService.isLoggedIn(token).subscribe(res=> {
+      this._cookieService.set('IsLogged',res)
+      return res
+    })
   }
 }

@@ -4,7 +4,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
 export class RoomService {
+  headerDict = {
+    'Authorization': 'N0Clu3'
+  }
+
   constructor(private http: HttpClient) { 
   }
   getData(GetAllEntries : Boolean,roomNumber? : String){

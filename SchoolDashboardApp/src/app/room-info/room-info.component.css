@@ -4,6 +4,11 @@
     height:60%;
 }
 
+html {
+    background-color: cornflowerblue;
+    height:100vh;
+}
+
 mat-grid-tile {
     background: lightslategray;
   }
@@ -20,7 +25,6 @@ mat-grid-tile {
   }
 
   .RoomDiv{
-
       flex-direction: column;
   }
 

@@ -13,7 +13,8 @@ export class RoomInfoComponent implements OnInit {
 
   roomList : any;
   specificRoom : any;
-  constructor(private room:RoomService,public datepipe: DatePipe) { 
+  showloadingindiactor = true;
+  constructor(private room:RoomService,public datepipe: DatePipe) {
   }
 
   ngOnInit(): void {

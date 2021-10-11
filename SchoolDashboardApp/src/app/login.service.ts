@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaderResponse, HttpHeaders, HttpParams, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { BehaviorSubject,observable,Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 export class userObj {
   username: string
@@ -16,7 +17,7 @@ export class userObj {
 
 export class LoginService {
 
-  constructor(private http: HttpClient, private cookieService: CookieService,private router: Router) { 
+  constructor(private http: HttpClient, private cookieService: CookieService,private router: Router,private jwtHelper:JwtHelperService) { 
   }
   verifyLogin(usernameInput : string, passwordInput : string){
     let url = "http://localhost:48935/api/Login";
@@ -31,8 +32,18 @@ export class LoginService {
       }
     ),
     catchError((err: any)=>{
-      this.router.navigate['login']
       return throwError(err);
     }));
+  }
+
+  isLoggedIn(token:string){
+    let url = "http://localhost:48935/api/Login/IsLoggedIn?tokenString=" + token;
+    return this.http.post(url,null).pipe(
+      map(
+        (response:any) => {
+          return response['token'];
+        }
+      )
+    )
   }
 }

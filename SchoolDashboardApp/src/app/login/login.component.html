@@ -1,6 +1,10 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div class="wrapper">
 <mat-card class="login-card">
     <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
+      <mat-card-title class="lolern">Login</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form class="example-form">
@@ -14,12 +18,16 @@
           </tr>
           <tr>
           <td><mat-form-field class="example-full-width">
-            <input matInput placeholder="Password" [(ngModel)]="password"type="password" name="password" required>
+            <input matInput (keyup.enter)="login()" placeholder="Password" [(ngModel)]="password"type="password" name="password" required>
           </mat-form-field></td>
         </tr></table>
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button (click)="login()" color="primary">Login</button>
+      <div *ngIf="showloadingindiactor"><p class="doesthiswork"></p></div>
+      <button class="login-button" mat-raised-button (click)="login()" color="success"><mat-icon>login</mat-icon></button>
     </mat-card-actions>
   </mat-card>
+  </div>
+</body>
+</html>
