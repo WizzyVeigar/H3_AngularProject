@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SchoolApi.Attributes;
 using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
@@ -14,8 +15,8 @@ namespace SchoolApi.Controllers
 {
     [ApiController]
     [Route("Api/Angular")]
-    //Controller for sending objects to the front end
-    public class AngularController : Controller, IHaveDbContext
+    //Controller responsible for sending objects to the front end
+    public class AngularController : Controller, IHaveDbContext, IFetchDataByRoomNumber<DataEntry>
     {
         //DI a DbContext class into the controller
         public AngularController(DbContext context)
@@ -43,9 +44,10 @@ namespace SchoolApi.Controllers
         /// <param name="roomNumber">The specified room's number</param>
         /// <returns>Returns a list of Entries, if an error occurs; return null</returns>
         [HttpGet]
+        //Only calls with a valid token header, can call this method
         [JwtAuthorize]
         [Route("GetRoom")]
-        public List<DataEntry> GetDataEntries(string roomNumber)
+        public List<DataEntry> GetData(string roomNumber)
         {
             try
             {
@@ -75,6 +77,7 @@ namespace SchoolApi.Controllers
         /// <param name="roomNumber">The room's number of which entry you want to find</param>
         /// <returns>Returns the latest data entry</returns>
         [HttpGet]
+        [JwtAuthorize]
         [Route("LatestSingle")]
         public DataEntry GetLatestEntrySingleRoom(string roomNumber)
         {
@@ -113,20 +116,19 @@ namespace SchoolApi.Controllers
         {
             try
             {
-                SchoolContext con = (SchoolContext)Context;
-
-                //Need to initialize the list for the coming loop
-                List<DataEntry> sortedEntries = new List<DataEntry>();
-
-                var efEntries = con.DataEntry
+                List<DataEntry> efEntries = ((SchoolContext)Context).DataEntry
                     .Include(x => x.HumidityTempSensor)
                     .Include(x => x.PhotoResistor)
                     .OrderBy(x => x.RoomNumber)
                     .ThenByDescending(x => x.CreatedTime)
                     .ToList();
 
+                //Need to initialize the list for the coming loop
+                List<DataEntry> sortedEntries = new List<DataEntry>();
+
                 for (int i = 0; i < efEntries.Count; i++)
                 {
+                    //If true, sortedEntries contains a room with that roomNumber
                     bool exists = false;
 
                     for (int j = 0; j < sortedEntries.Count; j++)
@@ -134,6 +136,7 @@ namespace SchoolApi.Controllers
                         if (efEntries.ElementAt(i).RoomNumber == sortedEntries[j].RoomNumber)
                         {
                             exists = true;
+                            //Break out of the nested for loop, when exists becomes true
                             break;
                         }
                     }
@@ -141,7 +144,6 @@ namespace SchoolApi.Controllers
                     if (!exists)
                         sortedEntries.Add(efEntries.ElementAt(i));
                 }
-
                 return sortedEntries;
             }
             catch (Exception e)

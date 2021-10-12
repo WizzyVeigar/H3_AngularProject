@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SchoolApi
+namespace SchoolApi.Attributes
 {
     //What can we put this attribute on?
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]

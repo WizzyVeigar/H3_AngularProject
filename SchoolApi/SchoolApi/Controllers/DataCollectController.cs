@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SchoolApi.Attributes;
 using SchoolApi.Interfaces;
 using SchoolApi.Models;
 using System;
@@ -30,9 +31,19 @@ namespace SchoolApi.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Saves data to the database
+        /// </summary>
+        /// <param name="temperature">The current temperature</param>
+        /// <param name="humidity">The current humidity</param>
+        /// <param name="light">The current light level</param>
+        /// <param name="roomNumber">The room where the data was collected from</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Save")]
-        public string PostTemperature(string temperature, string humidity, string light, string roomNumber)
+        [ApiKeyAuth(Key = "SaveData")]
+        public string SaveNewDataEntry(string temperature, string humidity, string light, string roomNumber)
         {
             try
             {
@@ -53,11 +64,10 @@ namespace SchoolApi.Controllers
 
                 Context.SaveChanges();
             }
-            catch (Exception)
+            catch (FormatException)
             {
                 return null;
             }
-
 
             Debug.WriteLine(temperature + " and this " + humidity + " and light: " + light);
             return temperature + " and this " + humidity + " and light: " + light;

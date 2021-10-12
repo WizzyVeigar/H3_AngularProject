@@ -35,6 +35,7 @@ namespace SchoolApi
                     "Data Source = (LocalDb)\\MSSQLLocalDB; Initial Catalog = SchoolDash; Integrated Security = true;"
                 ));
 
+
             services.AddScoped<DbContext, SchoolContext>();
 
             services.AddCors(options => options.AddDefaultPolicy(

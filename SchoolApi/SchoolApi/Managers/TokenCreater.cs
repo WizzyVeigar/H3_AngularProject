@@ -24,17 +24,29 @@ namespace SchoolApi.Managers
             Config = config;
         }
 
+        /// <summary>
+        /// Creates a new <see cref="IssuedToken"/> object with a newly generated token string
+        /// </summary>
+        /// <param name="username">Username of the user</param>
+        /// <param name="expDate"> When the token should expire</param>
+        /// <returns></returns>
         public IssuedToken CreateToken(string username, DateTime expDate)
         {
             return new IssuedToken
             {
                 Username = username,
-                TokenString = GenerateJWTToken(expDate, username),
+                TokenString = GenerateJWTToken(username, expDate),
                 ExpiryDate = expDate
             };
         }
 
-        private string GenerateJWTToken(DateTime expiryDate, string username)
+        /// <summary>
+        /// Generate a Json Web token, including the username in the payload
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="expiryDate"></param>
+        /// <returns></returns>
+        private string GenerateJWTToken(string username, DateTime expiryDate)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["Jwt:Key"]));
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -49,10 +61,15 @@ namespace SchoolApi.Managers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        /// <summary>
+        /// Extend a valid token's expiry date with 15 minutes
+        /// </summary>
+        /// <param name="token"></param>
         public void RefreshToken(IssuedToken token)
         {
             DateTime expDate = DateTime.Now.AddMinutes(15);
-            token.TokenString = GenerateJWTToken(expDate, token.Username);
+            token.TokenString = GenerateJWTToken(token.Username, expDate);
             token.ExpiryDate = expDate;
         }
     }
