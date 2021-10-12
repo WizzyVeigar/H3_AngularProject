@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gTa7UcTF7aEwId8Y5qvIwIQzm+Q5D/yCQo6POFiyw8K/FL6HWY5DiZqEHl2pmo02SgXeqEs6CAI23HJw0FqOZg==",
+  "dgSpecHash": "vzqhYbdW/LGvL846NGHCZnmD+N8JKla6GHx3xhjsFGalcXo5uOEGHgrDNDTElf1lyLiz+jpIeMmaIZlWBse4Xw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kenn5073\\Source\\Repos\\H3_AngularProject\\SchoolApi\\SchoolApi\\SchoolApi.csproj",
+  "projectFilePath": "C:\\Users\\Kenn5073\\source\\repos\\H3_AngularProject\\SchoolApi\\SchoolApi\\SchoolApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kenn5073\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\Kenn5073\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

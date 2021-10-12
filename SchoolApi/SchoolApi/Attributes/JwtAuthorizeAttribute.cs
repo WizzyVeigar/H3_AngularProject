@@ -10,13 +10,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SchoolApi
+namespace SchoolApi.Attributes
 {
     //IAuthorizationFilter is ran before the IActionFilter
-    //https://stackoverflow.com/questions/19249511/difference-between-iactionfilter-and-iauthorizationfilter    
+    //check daily report for link
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class JwtAuthorizeAttribute : Attribute, IAuthorizationFilter
     {
+        //Runs before hitting the endpoint
+        //If any errors occur, set context.Result instead of letting it go through
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             try
@@ -38,17 +40,18 @@ namespace SchoolApi
                 {
                     context.Result = new JsonResult(new
                     {
-                        message = "Forbidden, no user was found",
+                        message = "Forbidden, no connection was found",
                         StatusCode = StatusCodes.Status403Forbidden
                     });
                 }
+                //Run the end point, since user was found
             }
             catch (Exception e)
             {
                 context.Result = new JsonResult(new
                 {
-                    message = "Forbidden",
-                    StatusCode = StatusCodes.Status403Forbidden,
+                    message = "Internal server error",
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     ErrorMessage = e.Message
                 });
             }
