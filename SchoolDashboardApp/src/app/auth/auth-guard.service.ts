@@ -9,6 +9,7 @@ export class AuthGuardService implements CanActivate {
 
   constructor(public auth: AuthService,public router: Router) { }
 
+  //Calls isAuthenticated to check if current user (based on token) is authorized
   canActivate() : boolean {
     this.auth.isAuthenticated().then(value => {
       if(value){

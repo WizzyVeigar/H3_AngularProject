@@ -1,0 +1,12 @@
+<div class="testing"><mat-toolbar class="toolBar" *ngIf="isLoggedIn$ | async">
+    <span>School Dashboard</span>
+    <a [routerLink]="['room']">Room Map</a>
+    <a [routerLink]="['allrooms']">All Rooms</a>
+    <span class="spacer"></span>
+    <div class="userSection">
+        <span>Logged in as</span>
+        <span [innerHTML]="userName$"></span>
+    </div>
+    <span><button mat-raised-button color="warn" (click)='onLogout()'><mat-icon>logout</mat-icon></button></span>
+  </mat-toolbar>
+  </div>

@@ -24,7 +24,7 @@
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <div *ngIf="showloadingindiactor"><p class="doesthiswork"></p></div>
+      <div *ngIf="notLogged"><p>Could not log in!</p></div>
       <button class="login-button" mat-raised-button (click)="login()" color="success"><mat-icon>login</mat-icon></button>
     </mat-card-actions>
   </mat-card>

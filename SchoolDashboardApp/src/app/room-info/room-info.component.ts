@@ -20,8 +20,10 @@ export class RoomInfoComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //Columns for mat tables to display
   displayedColumns : string[] = ['roomNumber','createdTime','temperature','humidity','Lights on'];
 
+  //Gets latest room data on specific room, and populates table and HTML elements with the data
   async GetRoom(roomNumber:String) {
     this.room.getData(false,roomNumber).subscribe(e=>{
       this.specificRoom = e;
@@ -32,6 +34,7 @@ export class RoomInfoComponent implements OnInit {
       document.getElementById("light").innerText = this.specificRoom.photoResistor.lightLevel == "1" ? "Yes" : "No";
     });
 
+    //calls room service to get all entries on a specific room
     this.room.getData(true,roomNumber).subscribe(e=>{
       this.roomList = e;
       console.log(this.roomList[0].roomNumber)

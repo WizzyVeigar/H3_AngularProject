@@ -24,6 +24,8 @@ import { APP_INITIALIZER } from '@angular/core';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { AllRoomsComponent } from './all-rooms/all-rooms.component';
 import {MatIconModule} from '@angular/material/icon'
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { HeaderComponent } from './navigation/header/header.component'
 
 export function getToken(): string {
   return localStorage.getItem('token');
@@ -34,7 +36,8 @@ export function getToken(): string {
     AppComponent,
     RoomInfoComponent,
     LoginComponent,
-    AllRoomsComponent
+    AllRoomsComponent,
+    HeaderComponent
   ],
   imports: [
     HttpClientModule,
@@ -45,6 +48,7 @@ export function getToken(): string {
     MatCardModule,
     BrowserModule,
     MatButtonModule,
+    MatToolbarModule,
     MatIconModule,
     AppRoutingModule,
     BrowserAnimationsModule,

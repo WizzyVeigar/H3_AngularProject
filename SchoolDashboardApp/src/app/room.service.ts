@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { Options } from 'selenium-webdriver';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,10 @@ export class RoomService {
     'Authorization': 'N0Clu3'
   }
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient,private cookieService : CookieService) { 
   }
+
+  //Gets latest data on a specific room based on roomnumber
   getData(GetAllEntries : Boolean,roomNumber? : String){
     let url = "";
     if(!GetAllEntries){
@@ -20,7 +24,15 @@ export class RoomService {
     else {
       url = "http://localhost:48935/api/Angular/GetRoom?roomNumber=" + roomNumber;
     }
-    return this.http.get<RoomObj>(url);
+    var token = this.cookieService.get('IsLogged')
+    return this.http.get<RoomObj>(url, {headers: {'Authorization' :token}});
+  }
+
+  //Gets the latest entry of all rooms.
+  getLatestAll(){
+    let url = "http://localhost:48935/api/Angular/LatestAll";
+    var token = this.cookieService.get('IsLogged')
+    return this.http.get<RoomObj>(url, {headers: {'Authorization' :token}});
   }
 }
 

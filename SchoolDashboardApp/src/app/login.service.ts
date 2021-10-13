@@ -19,6 +19,8 @@ export class LoginService {
 
   constructor(private http: HttpClient, private cookieService: CookieService,private router: Router,private jwtHelper:JwtHelperService) { 
   }
+
+  //Calls API to verify user based on username and password
   verifyLogin(usernameInput : string, passwordInput : string){
     let url = "http://localhost:48935/api/Login";
     var tempobj = new userObj();
@@ -36,6 +38,7 @@ export class LoginService {
     }));
   }
 
+  //Calls API to check if current token is authorized lately.
   isLoggedIn(token:string){
     let url = "http://localhost:48935/api/Login/IsLoggedIn?tokenString=" + token;
     return this.http.post(url,null).pipe(
