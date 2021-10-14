@@ -25,8 +25,8 @@
           <area alt="H.07" title="H.07" [routerLink]="" (click)="GetRoom('H.07')"  coords="159,213,313,321" shape="rect">
         </map>
       </mat-grid-tile>
-      <mat-grid-tile [colspan]="2">
-        <table mat-table [dataSource]="roomList" matSort class="mat-elevation-z8">
+      <mat-grid-tile class="room_table" [colspan]="2">
+        <table class="mat-elevation-z8" mat-table [dataSource]="roomList" matSort class="mat-elevation-z8">
 
           <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->

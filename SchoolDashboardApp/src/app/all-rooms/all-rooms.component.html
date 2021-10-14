@@ -3,6 +3,7 @@
     <body>
     <div class="internalMatGrid">
       <mat-grid-list cols="2" rowHeight="500px">
+          <div class="list-wrapper">
         <mat-grid-tile [colspan]="2">
           <table mat-table [dataSource]="roomList" matSort class="mat-elevation-z8">
   
@@ -35,6 +36,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </mat-grid-tile>
+    </div>
       </mat-grid-list>
     </div>
     </body>
