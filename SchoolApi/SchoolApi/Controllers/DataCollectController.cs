@@ -6,6 +6,7 @@ using SchoolApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 namespace SchoolApi.Controllers
@@ -45,6 +46,16 @@ namespace SchoolApi.Controllers
         [ApiKeyAuth(Key = "SaveData")]
         public string SaveNewDataEntry(string temperature, string humidity, string light, string roomNumber)
         {
+            CultureInfo myCIintl = CultureInfo.CreateSpecificCulture("da-DK");
+
+            double sda = double.Parse(temperature, CultureInfo.GetCultureInfo("da-DK"));
+
+            
+            //humidity = string.Format(, "{0:C}", humidity);
+            light = string.Format(new CultureInfo("da-DK"), "{0:C}", light);
+            //temperature = temperature.Replace(".", ",");
+            //humidity = humidity.Replace(".", ",");
+            //light = light.Replace(".", ",");
             try
             {
                 Context.Add(new DataEntry

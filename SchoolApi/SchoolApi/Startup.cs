@@ -42,12 +42,12 @@ namespace SchoolApi
                 builder => builder.AllowAnyOrigin().AllowAnyHeader()));
 
             //services.AddAuthentication();
-            services.AddAuthorization();
-            services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            });
+            //services.AddAuthorization();
+            //services.AddAuthentication(option =>
+            //{
+            //    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //});
 
             services.AddSwaggerGen(swagger =>
             {
@@ -116,10 +116,10 @@ namespace SchoolApi
 
             //app.UseHttpsRedirection();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseRouting();
             app.UseCors();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
 
             app.UseEndpoints(endpoints =>

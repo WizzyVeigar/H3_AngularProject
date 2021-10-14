@@ -13,7 +13,7 @@ namespace SchoolApi.Attributes
 {
     //What can we put this attribute on?
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ApiKeyAuthAttribute : AuthorizeAttribute, IAsyncActionFilter
+    public class ApiKeyAuthAttribute : Attribute, IAsyncActionFilter
     {
         public string Key { get; set; }
 
